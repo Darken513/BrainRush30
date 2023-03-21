@@ -22,6 +22,7 @@ export class LoginPageComponent implements OnInit {
   }
 
   onSubmit(): void {
+    console.log(this.loginForm.get('password')!.invalid && (this.loginForm.get('password')!.dirty || this.loginForm.get('password')!.touched))
     const email = this.loginForm.value.email;
     const password = this.loginForm.value.password;
 
