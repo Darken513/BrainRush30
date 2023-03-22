@@ -1,27 +1,23 @@
 const jwt = require('jsonwebtoken');
-const { v4: uuidv4 } = require('uuid');
+const userDB = require('../services/user.model');
 
-//todo make this into an sql table or something
-const users = [];
-
-exports.login = (req, res) => {
+exports.login = async (req, res) => {
   const { email, password } = req.body;
-  const user = users.find(u => u.email === email && u.password === password);
+  const user = await userDB.getByEmailAndPassword(email, password);
   if (user) {
-    const token = jwt.sign({ uid: user.uid }, 'secretkey');
+    const token = jwt.sign({ id: user.id, email: user.email }, 'BrainRush30LongKeyHere!!'); //make the key a general constant
     res.json({ token });
   } else {
     res.status(401).json({ message: 'Authentication failed' });
   }
 };
 
-exports.signup = (req, res) => {
+exports.signup = async (req, res) => {
   const { email, password } = req.body;
-  const userExists = users.some(user => user.email === email);
+  const userExists = await userDB.getByEmail(email);
   if (userExists) {
     return res.status(409).json({ message: 'Email already exists.' });
   }
-  const uid = uuidv4();
-  users.push({ uid, email, password });
+  await userDB.createNew(password, email);
   res.status(201).json({ message: 'User created successfully.' });
 };
