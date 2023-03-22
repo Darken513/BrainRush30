@@ -1,40 +1,37 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable} from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private apiUrl = 'http://localhost:80/auth';
-  private tokenSubject = new BehaviorSubject<string|null>(null);
 
-  constructor(private http: HttpClient) {}
-
-  public get token$(): Observable<string|null> {
-    return this.tokenSubject.asObservable();
-  }
+  constructor(
+    private router: Router,
+    private http: HttpClient
+  ) { }
 
   public login(email: string, password: string): Observable<any> {
-    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, { email, password })
-      .pipe(
-        tap(({ token }) => {
-          localStorage.setItem('token', token);
-          this.tokenSubject.next(token);
-        })
-      );
+    return this.http.post<{ response: any }>(`${this.apiUrl}/login`, { email, password });
+  }
+
+  public setToken(token: string): void {
+    localStorage.setItem('token', token);
+    this.router.navigateByUrl('/home');
   }
 
   public logout(): void {
     localStorage.removeItem('token');
-    this.tokenSubject.next(null);
+    this.router.navigateByUrl('/auth/login');
   }
 
-  public checkToken(): void {
+  public checkToken(): any {
     const token = localStorage.getItem('token');
     if (token) {
-      this.tokenSubject.next(token);
+      return token
     }
   }
 

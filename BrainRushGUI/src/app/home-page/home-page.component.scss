@@ -1,0 +1,39 @@
+.container-full{
+    width: 100%;
+    height: 100%;
+    background-color: white;
+}
+.container-head{
+    width: 100%;
+    height: 60px;
+    background-color: #46006c;
+    .btn{
+        background: transparent;
+        border: 2px solid white;
+        height: 50px;
+        margin: 5px;
+        font-size: 1.1rem;
+        border-radius: 25px;
+        padding: 0 20px;
+        font-weight: 300;
+        float: right;
+    }
+    .btn:hover{
+        border: 2px solid rgb(117, 246, 105);
+        color: rgb(117, 246, 105);
+    }
+    i{
+        margin: 0 5px;
+        font-size: 1.3rem;
+        position: relative;
+        top: 2px;
+    }
+    h3{
+        float: right;
+        font-size: 1rem;
+        font-weight: 400;
+        color: white;
+        padding: 20px;
+    }
+}
+

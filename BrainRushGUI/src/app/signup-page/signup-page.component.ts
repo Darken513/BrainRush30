@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
+import { NotificationService } from '../notification.service';
 
 @Component({
   selector: 'app-signup-page',
@@ -13,7 +14,8 @@ export class SignupPageComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private notifService: NotificationService
   ) { }
 
   ngOnInit() {
@@ -44,10 +46,12 @@ export class SignupPageComponent implements OnInit {
       this.authService.signUp(email, password)
         .subscribe({
           next: (response: any) => {
-            // handle successful sign-up
+            if (response.title && response.body) {
+              this.notifService.showNotification(response.title, response.body)
+            }
           },
           error: (error: any) => {
-            // handle sign-up error
+            console.log(error)
           }
         });
     }

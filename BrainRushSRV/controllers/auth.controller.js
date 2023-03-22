@@ -8,7 +8,7 @@ exports.login = async (req, res) => {
     const token = jwt.sign({ id: user.id, email: user.email }, 'BrainRush30LongKeyHere!!'); //make the key a general constant
     res.json({ token });
   } else {
-    res.status(401).json({ message: 'Authentication failed' });
+    res.json({ title: 'Error', body: 'Wrong credentials.' });
   }
 };
 
@@ -16,8 +16,9 @@ exports.signup = async (req, res) => {
   const { email, password } = req.body;
   const userExists = await userDB.getByEmail(email);
   if (userExists) {
-    return res.status(409).json({ message: 'Email already exists.' });
+    res.json({ title: 'Error', body: 'Email already exists.' });
+    return;
   }
   await userDB.createNew(password, email);
-  res.status(201).json({ message: 'User created successfully.' });
+  res.status(201).json({ title: 'Success', body: 'User created successfully.' });
 };

@@ -13,3 +13,61 @@ body {
     overflow: hidden;
     background-color: #46006c;
 }
+
+#notification-container .notification {
+    display: block;
+    position: absolute;
+    width: 230px;
+    top: -150px;
+    right: 20px;
+    opacity: 0.8;
+    border-radius: 15px;
+    animation-name: slideinTop;
+    animation-duration: 0.85s;
+    animation-fill-mode: forwards;
+    padding: 10px 20px;
+}
+
+#notification-container {
+    .notification.error {
+        background: #ff7466;
+    }
+
+    .notification.success {
+        background: #66ff80;
+    }
+
+    .notification.warning {
+        background: #ffec66;
+    }
+
+    .notification {
+        p.body {
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+
+        h3.title {
+            font-size: 1.3rem;
+            font-weight: 400;
+        }
+
+        .btn {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            padding: 0;
+            font-size: 1rem;
+        }
+    }
+}
+
+@keyframes slideinTop {
+    from {
+        top: -150px;
+    }
+
+    to {
+        top: 20px;
+    }
+}
