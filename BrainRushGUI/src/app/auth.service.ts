@@ -16,8 +16,8 @@ export class AuthService {
     return this.tokenSubject.asObservable();
   }
 
-  public login(username: string, password: string): Observable<any> {
-    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, { username, password })
+  public login(email: string, password: string): Observable<any> {
+    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, { email, password })
       .pipe(
         tap(({ token }) => {
           localStorage.setItem('token', token);
@@ -36,5 +36,10 @@ export class AuthService {
     if (token) {
       this.tokenSubject.next(token);
     }
+  }
+
+  signUp(email: string, password: string): Observable<any> {
+    const body = { email, password };
+    return this.http.post<any>(`${this.apiUrl}/signup`, body);
   }
 }

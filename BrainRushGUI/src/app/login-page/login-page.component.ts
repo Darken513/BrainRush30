@@ -17,22 +17,21 @@ export class LoginPageComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
-  
+
   ngOnInit(): void {
   }
 
   onSubmit(): void {
-    console.log(this.loginForm.get('password')!.invalid && (this.loginForm.get('password')!.dirty || this.loginForm.get('password')!.touched))
     const email = this.loginForm.value.email;
     const password = this.loginForm.value.password;
 
-    this.authService.login(email, password).subscribe(
-      () => {
+    this.authService.login(email, password).subscribe({
+      next: (token) => {
         // Do something upon successful login
       },
-      (error) => {
+      error: (error) => {
         // Handle login error
       }
-    );
+    });
   }
 }
