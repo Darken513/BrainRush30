@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable} from 'rxjs';
 import { Router } from '@angular/router';
+import jwtDecode from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -28,11 +29,13 @@ export class AuthService {
     this.router.navigateByUrl('/auth/login');
   }
 
-  public checkToken(): any {
+  public getCurrentUser(): any {
     const token = localStorage.getItem('token');
     if (token) {
-      return token
+      const decodedToken = jwtDecode(token);
+      return decodedToken
     }
+    return null;
   }
 
   signUp(email: string, password: string): Observable<any> {

@@ -1,6 +1,30 @@
 <div class="container-full">
+    <div id="particles-js">
+    </div>
     <div class="container-head">
-        <button class="btn btn-primary" (click)="logout()">Logout <i class="fa fa-arrow-circle-right" aria-hidden="true"></i></button>
-        <h3><i class="fa fa-user-circle" aria-hidden="true"></i> affesachraf70@gmail.com</h3>
+        <button class="btn btn-primary" (click)="logout()">
+            Logout <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+        </button>
+        <h3>
+            <i class="fa fa-user-circle" aria-hidden="true"></i> {{ currUser.email }}
+        </h3>
+    </div>
+    <div class="calender">
+        <div
+        *ngFor="let dayDetail of daysProgress; let idx = index"
+        class="calender-card"
+        [ngClass]="{
+            disabled: currentDay < idx,
+            done: currentDay > idx,
+            current: currentDay == idx
+        }"
+        >
+        <h4 class="title">{{ idx < 9 ? "0" + (idx + 1) : idx + 1 }}</h4>
+        <div class="body">
+            <!-- <div class="difficulty-container">
+                <div class="dif-bar"></div>
+            </div> -->
+        </div>
+        </div>
     </div>
 </div>

@@ -71,3 +71,12 @@ body {
         top: 20px;
     }
 }
+
+#particles-js {
+    z-index: -1000;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: inherit;
+    background-color: #181818;
+}

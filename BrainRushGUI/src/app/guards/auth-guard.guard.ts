@@ -13,7 +13,7 @@ export class AuthGuard implements CanActivate {
   ) { }
 
   canActivate(): boolean {
-    if (this.authService.checkToken()) {
+    if (this.authService.getCurrentUser()) {
       this.router.navigate(['/home']);
       return false;
     } else {
