@@ -5,7 +5,7 @@ exports.login = async (req, res) => {
   const { email, password } = req.body;
   const user = await userDB.getByEmailAndPassword(email, password);
   if (user) {
-    const token = jwt.sign({ id: user.id, email: user.email }, 'BrainRush30LongKeyHere!!'); //make the key a general constant
+    const token = jwt.sign({ id: user.id, email: user.email }, 'AphatrackLongKeyHere!!'); //make the key a general constant
     res.json({ token });
   } else {
     res.json({ title: 'Error', body: 'Wrong credentials.' });

@@ -39,26 +39,27 @@
         font-weight: 400;
         color: white;
         padding: 20px;
+        margin: 0;
     }
 }
 
 .calender {
-    width: 900px;
+    width: max(800px, 70vw);
     margin: auto;
     margin-top: 10px;
-
+    
     .calender-card {
         cursor: pointer;
         position: relative;
         overflow: hidden;
-        height: 115px;
-        width: 147px;
+        height: min(calc(calc(100vh - 85px) / 5), 115px);
+        width: calc(16.5% - 3px);
         display: inline-block;
         background: #e9c0ff;
         margin: 1.5px;
         border-radius: 5px;
         margin-top: -5px;
-
+        transition: 0.3s;
         h4.title {
             font-size: 1.5rem;
             font-weight: 700;
@@ -96,12 +97,10 @@
             }
         }
     }
-
     .calender-card.done {
         opacity: 0.9;
         border: 1px solid #82ffba;
-        transition: 0.3s;
-        background: #b1ffdf;
+        background: #a9d19f;
     }
 
     .calender-card.done::before {
@@ -204,10 +203,9 @@
     width: 10.301%;
     height: 100%;
     margin-right: 1px;
-    position: relative;
+    vertical-align: top;
     background-color: #4c9d45;
     display: inline-block;
-    top: -3px;
 }
 
 .difficulty-container::before {
@@ -225,7 +223,7 @@
     overflow: hidden;
     margin-bottom: 5px;
     width: calc(100% - 20px);
-    height: 15px;
+    height: 1.5vh;
     background: #8f8f8f;
 }
 
@@ -239,4 +237,14 @@
 
 .difficulty-container:has(.dif-bar:nth-child(8)) .dif-bar {
     background-color: #b75b5b;
+}
+
+@media screen and (max-height: 620px) {
+    .calender-card {
+        height: 85px !important;
+    }
+    .calender-card:hover {
+        height: 115px !important;
+        margin-top: calc(min(calc(calc(100vh - 85px) / 5), 85px) - 125px - 10px) !important;
+    }
 }

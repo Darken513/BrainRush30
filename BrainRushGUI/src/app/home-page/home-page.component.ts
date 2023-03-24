@@ -10,7 +10,7 @@ export class HomePageComponent implements OnInit {
 
   difficulty: Array<any> = new Array(10);
   daysProgress: Array<any> = new Array(30).fill(1);
-  currentDay: number = 15;
+  currentDay: number = 26;
   currUser: any;
 
   constructor(
