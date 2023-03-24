@@ -7,13 +7,13 @@ const db_utils = require('./database')
 exports.createNew = async (password, email) => {
     let hash = bcrypt.hashSync(password, saltRounds);
     try {
-        return await db_utils.runSync(db, `INSERT INTO users (password, email) VALUES (?, ?)`, [hash, email]);
+        return await db_utils.runSync(db, `INSERT INTO USERS (password, email) VALUES (?, ?)`, [hash, email]);
     } catch (err) {
         return { error: err.message.includes('SQLITE_CONSTRAINT') ? 'User already exists' : 'An error has occurred' };
     }
 }
 exports.getByEmail = async (email) => {
-    const query = `SELECT * FROM users WHERE email = ?`;
+    const query = `SELECT * FROM USERS WHERE email = ?`;
     try {
         let row = await db_utils.getSync(db, query, [email]);
         if (!row) {
@@ -25,7 +25,7 @@ exports.getByEmail = async (email) => {
     }
 }
 exports.getById = async (usedId) => {
-    const query = `SELECT * FROM users WHERE id = ?`;
+    const query = `SELECT * FROM USERS WHERE id = ?`;
     try {
         let row = await db_utils.getSync(db, query, [usedId]);
         if (!row) {
@@ -37,7 +37,7 @@ exports.getById = async (usedId) => {
     }
 }
 exports.getByEmailAndPassword = async (email, plaintextPassword) => {
-    const query = `SELECT * FROM users WHERE email = ?`;
+    const query = `SELECT * FROM USERS WHERE email = ?`;
     try {
         let row = await db_utils.getSync(db, query, [email]);
         if (!row) {
@@ -55,7 +55,7 @@ exports.getByEmailAndPassword = async (email, plaintextPassword) => {
 }
 exports.getAll = async () => {
     try {
-        let rows = await db_utils.getAllSync(db, `SELECT * FROM users`);
+        let rows = await db_utils.getAllSync(db, `SELECT * FROM USERS`);
         return rows ? rows : [];
     } catch (err) {
         return { error: err.message };
