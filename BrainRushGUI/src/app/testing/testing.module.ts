@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TextToSpeechComponent } from './text-to-speech/text-to-speech.component';
 import { TestComponent } from './test/test.component';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -11,7 +12,8 @@ import { TestComponent } from './test/test.component';
     TestComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule
   ],
   exports:[
     TestComponent

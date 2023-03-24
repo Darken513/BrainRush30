@@ -7,9 +7,33 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TextToSpeechComponent implements OnInit {
 
+  public textToSpeak: string = "The text to speak goes here ! probably will be fetched from a database & procedurally generated";
+  public isSpeaking!: boolean;
+  public synth!: SpeechSynthesis;
+
   constructor() { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.synth = window.speechSynthesis;
+  }
+
+  public speak(): void {
+    if (this.synth.speaking) {
+      this.synth.cancel();
+    }
+    const utterance = new SpeechSynthesisUtterance(this.textToSpeak);
+    utterance.onend = () => {
+      this.isSpeaking = false;
+    };
+    this.isSpeaking = true;
+    this.synth.speak(utterance);
+  }
+
+  public stop(): void {
+    if (this.synth.speaking) {
+      this.synth.cancel();
+      this.isSpeaking = false;
+    }
   }
 
 }
