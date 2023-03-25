@@ -98,9 +98,13 @@
         }
     }
     .calender-card.done {
-        opacity: 0.9;
+        opacity: 0.85;
         border: 1px solid #82ffba;
         background: #a9d19f;
+    }
+
+    .calender-card:hover {
+        opacity: 0.95;
     }
 
     .calender-card.done::before {
@@ -244,7 +248,12 @@
         height: 85px !important;
     }
     .calender-card:hover {
+        opacity: 0.95;
         height: 115px !important;
         margin-top: calc(min(calc(calc(100vh - 85px) / 5), 85px) - 125px - 10px) !important;
     }
 }
+
+/*
+filter: invert(1) hue-rotate(210deg) sepia(0.1)
+*/

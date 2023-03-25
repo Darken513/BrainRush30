@@ -1,8 +1,8 @@
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('../database.db');
-const db_utils = require('./database')
+const db = new sqlite3.Database('../../database.db');
+const db_utils = require('../services/database')
 
 exports.createNew = async (password, email) => {
     let hash = bcrypt.hashSync(password, saltRounds);
@@ -24,14 +24,11 @@ exports.getByEmail = async (email) => {
         return { error: err.message };
     }
 }
-exports.getById = async (usedId) => {
+exports.getById = async (id) => {
     const query = `SELECT * FROM USERS WHERE id = ?`;
     try {
-        let row = await db_utils.getSync(db, query, [usedId]);
-        if (!row) {
-            return undefined;
-        }
-        return row;
+        let row = await db_utils.getSync(db, query, [id]);
+        return row?row:undefined; //refactor this into a base model class
     } catch (err) {
         return { error: err.message };
     }
