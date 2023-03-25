@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('../../database.db');
+const db = new sqlite3.Database('./database.db');
 const db_utils = require('../services/database')
 
 exports.createNew = async (password, email) => {
@@ -21,6 +21,7 @@ exports.getByEmail = async (email) => {
         }
         return row;
     } catch (err) {
+        console.log(err.message);
         return { error: err.message };
     }
 }
@@ -28,8 +29,9 @@ exports.getById = async (id) => {
     const query = `SELECT * FROM USERS WHERE id = ?`;
     try {
         let row = await db_utils.getSync(db, query, [id]);
-        return row?row:undefined; //refactor this into a base model class
+        return row ? row : undefined; //refactor this into a base model class
     } catch (err) {
+        console.log(err.message);
         return { error: err.message };
     }
 }
@@ -47,6 +49,7 @@ exports.getByEmailAndPassword = async (email, plaintextPassword) => {
             return undefined;
         }
     } catch (err) {
+        console.log(err.message);
         return { error: err.message };
     }
 }
@@ -55,6 +58,7 @@ exports.getAll = async () => {
         let rows = await db_utils.getAllSync(db, `SELECT * FROM USERS`);
         return rows ? rows : [];
     } catch (err) {
+        console.log(err.message);
         return { error: err.message };
     }
 }

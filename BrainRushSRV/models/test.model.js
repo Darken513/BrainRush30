@@ -1,10 +1,12 @@
 const _ = require("lodash");
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('../../database.db');
+const db = new sqlite3.Database('./database.db');
 const db_utils = require('../services/database')
 const generated_keywDB = require('./generated_k.model')
+const generated_tts_thDB = require('./generated_tts_th.model')
 const k_g_kDB = require('./k_gen_k.model')
 const keywBD = require('./keyword.model')
+const ttsBD = require('./TTS.model')
 
 function NbrKeywByDay(day) {
     return Math.floor(0.207 * day + 3.793);
@@ -29,11 +31,22 @@ async function generateKWTest(test_id, day) {
         let keyword = keywords[idx];
         await k_g_kDB.createNew(keyword.id, newGenKw.lastID);
     }
+    return 1;
 }
-async function generateTTSTest(test_id, day) {
-
+async function generateTTS_TH_Test(test_id, day, isTH) {
+    let randomKeyw = await keywBD.getRandNbr(5 + Math.floor(Math.random() * 3));
+    let difficulty = diffcultySelector(day)
+    let tts = await ttsBD.getRandByDifficulty(difficulty);
+    let allKeyw = tts.keywords.split(',').map(val => val.trim())
+    allKeyw.push(...randomKeyw.map(val => val.word))
+    let displayedKeywords = _.shuffle(allKeyw).reduce((toret, curr) => {
+        toret += toret ? ', ' + curr : curr
+        return toret
+    }, '')
+    await generated_tts_thDB.createNew(test_id, tts.id, displayedKeywords, isTH);
+    return 1;
 }
-exports.getAllGKbyTestId = async (test_id) => {
+exports.getAll_GK_byTestId = async (test_id) => {
     let query = ` 
         SELECT * FROM TESTS
             JOIN GENERATED_KEYWORDS gk ON TESTS.id = gk.test_id
@@ -54,13 +67,31 @@ exports.getAllGKbyTestId = async (test_id) => {
         });
         return mappedRes
     } catch (err) {
+        console.log(err.message);
         return { error: err.message };
     }
 }
-
+exports.getAll_TTSbased_byTestId = async (test_id, isTH) => {
+    let query = ` 
+        SELECT * FROM TESTS 
+            JOIN GENERATED_TTS_TH gtsh ON TESTS.id = gtsh.test_id 
+                JOIN TEXT_TO_SPEECH tts ON tts.id = gtsh.TTS_id 
+        WHERE TESTS.id = ?`.concat(isTH ? " AND gtsh.type = ?;" : '');
+    try {
+        let res = await db_utils.getAllSync(db, query, [test_id, isTH]);
+        const mappedRes = _.map(res, (value) => {
+            value.type = value.isTH ? 'TH' : 'TTS';
+            return _.omit(value, ['day', 'passing_score', 'answer', 'test_id', 'TTS_id', 'keywords'])
+        });
+        return mappedRes
+    } catch (err) {
+        console.log(err.message);
+        return { error: err.message };
+    }
+}
 exports.createNew = async (day, nbr_genKW, nbr_genTTS, nbr_genTH) => {
     try {
-        let toret = {id:-1, tests:[]}
+        let toret = { id: -1, tests: [] }
         let passing_score = getScoreByDay(day)
         let newTest = await db_utils.runSync(db, `INSERT INTO TESTS (day, passing_score) VALUES (?,?)`, [day, passing_score]);
         toret.id = newTest.lastID;
@@ -68,13 +99,40 @@ exports.createNew = async (day, nbr_genKW, nbr_genTTS, nbr_genTH) => {
             await generateKWTest(newTest.lastID, day);
         }
         for (let i = 0; i < nbr_genTTS; i++) {
-            await generateTTSTest(newTest.lastID, day);
+            await generateTTS_TH_Test(newTest.lastID, day, false);
         }
-        toret.tests.push(...(await exports.getAllGKbyTestId(newTest.lastID)));
+        for (let i = 0; i < nbr_genTH; i++) {
+            await generateTTS_TH_Test(newTest.lastID, day, true);
+        }
+        toret.tests.push(...(await exports.getAll_GK_byTestId(newTest.lastID)));
+        toret.tests.push(...(await exports.getAll_TTSbased_byTestId(newTest.lastID)));
         return toret;
     } catch (err) {
+        console.log(err.message);
         return { error: err.message };
     }
 }
-
-exports.createNew(3, 2);
+exports.getByIdShort = async (id) => {
+    const query = `SELECT * FROM TESTS WHERE id = ?`;
+    try {
+        let row = await db_utils.getSync(db, query, [id]);
+        return row ? row : undefined;
+    } catch (err) {
+        console.log(err.message);
+        return { error: err.message };
+    }
+};
+exports.getById = async (id) => {
+    try {
+        let toret = { id, tests: [] }
+        let temp = await exports.getByIdShort(id);
+        toret.passing_score = temp.passing_score;
+        toret.day = temp.day;
+        toret.tests.push(...(await exports.getAll_GK_byTestId(id)));
+        toret.tests.push(...(await exports.getAll_TTSbased_byTestId(id)));
+        return toret;
+    } catch (err) {
+        console.log(err.message);
+        return { error: err.message };
+    }
+}

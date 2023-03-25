@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TestingService } from '../testing.service';
 
 @Component({
   selector: 'app-test',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TestComponent implements OnInit {
 
-  constructor() { }
+  constructor(private testingService: TestingService) { }
 
   ngOnInit(): void {
+    this.testingService.generateTest(2).subscribe((res) => { })
   }
 
 }

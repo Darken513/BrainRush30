@@ -1,7 +1,4 @@
-const sqlite3 = require("sqlite3").verbose();
-const db = new sqlite3.Database("../database.db");
-
-exports.initDataBase = () => {
+exports.initDataBase = (db) => {
     db.run(`
         CREATE TABLE IF NOT EXISTS USERS (
             id INTEGER PRIMARY KEY,
@@ -33,7 +30,7 @@ exports.initDataBase = () => {
             user_id INTEGER,
             test_id INTEGER,
             score INTEGER,
-            attempted_at TIMESTAMP,
+            attempted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY(user_id) REFERENCES USERS(id),
             FOREIGN KEY(test_id) REFERENCES TESTS(id)
         );`
@@ -52,7 +49,7 @@ exports.initDataBase = () => {
             TTS_id INTEGER,
             displayed_keywords TEXT,
             answer TEXT,
-            type BOOLEAN,
+            isTH BOOLEAN,
             FOREIGN KEY(test_id) REFERENCES TESTS(id),
             FOREIGN KEY(TTS_id) REFERENCES TEXT_TO_SPEECH(id)
         );`
@@ -94,7 +91,7 @@ exports.getSync = function (db, sql, params) {
 };
 exports.getAllSync = function (db, sql, params) {
     return new Promise((resolve, reject) => {
-        db.all(sql, params?params:[], function (err, rows) {
+        db.all(sql, params ? params : [], function (err, rows) {
             if (err) reject(err);
             else resolve(rows);
         });

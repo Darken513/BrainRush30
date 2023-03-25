@@ -1,5 +1,5 @@
 const sqlite3 = require("sqlite3").verbose();
-const db = new sqlite3.Database("../../database.db");
+const db = new sqlite3.Database("./database.db");
 const db_utils = require("../services/database");
 
 exports.createNew = async (text, keywords, difficulty) => {
@@ -10,6 +10,7 @@ exports.createNew = async (text, keywords, difficulty) => {
             [text, keywords, difficulty]
         );
     } catch (err) {
+        console.log(err.message);
         return { error: err.message };
     }
 };
@@ -17,8 +18,9 @@ exports.getById = async (id) => {
     const query = `SELECT * FROM TEXT_TO_SPEECH WHERE id = ?`;
     try {
         let row = await db_utils.getSync(db, query, [id]);
-        return row?row:undefined;
+        return row ? row : undefined;
     } catch (err) {
+        console.log(err.message);
         return { error: err.message };
     }
 };
@@ -29,6 +31,7 @@ exports.getAllByIds = async (idList) => {
         let rows = await db_utils.getAllSync(db, query, idList);
         return rows ? rows : [];
     } catch (err) {
+        console.log(err.message);
         return { error: err.message };
     }
 };
@@ -37,6 +40,7 @@ exports.getAll = async () => {
         let rows = await db_utils.getAllSync(db, `SELECT * FROM TEXT_TO_SPEECH`);
         return rows ? rows : [];
     } catch (err) {
+        console.log(err.message);
         return { error: err.message };
     }
 };
@@ -49,18 +53,20 @@ exports.getAllByDifficulty = async (difficulty) => {
         );
         return rows ? rows : [];
     } catch (err) {
+        console.log(err.message);
         return { error: err.message };
     }
 };
-exports.getRandNByDifficulty = async (n, difficulty) => {
+exports.getRandByDifficulty = async (difficulty) => {
     try {
-        let rows = await db_utils.getAllSync(
+        let rows = await db_utils.getSync(
             db,
-            `SELECT * FROM TEXT_TO_SPEECH WHERE difficulty = ? ORDER BY RANDOM() LIMIT ${n}`,
+            `SELECT * FROM TEXT_TO_SPEECH WHERE difficulty = ? ORDER BY RANDOM() LIMIT 1`,
             [difficulty]
         );
-        return rows ? rows : [];
+        return rows;
     } catch (err) {
+        console.log(err.message);
         return { error: err.message };
     }
 };
