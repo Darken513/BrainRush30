@@ -11,6 +11,7 @@ body {
     height: 100%;
     width: 100%;
     overflow: hidden;
+    /* filter: invert(1) hue-rotate(45deg); */
 }
 
 #notification-container .notification {
@@ -78,7 +79,7 @@ body {
     left: 0;
     height: 100vh;
     width: 100vw;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.8);
 }
 .modal-question{
     position: fixed;
@@ -88,9 +89,9 @@ body {
     height: 100px;
     padding: 15px;
     border-radius: 20px;
-    box-shadow: 0 0 15px black;
+    box-shadow: 0 0 15px #1a1919;
     width: 300px;
-    background: #383838;
+    background: #282828;
     color: white;
     h1{
         font-size: 1.3rem;

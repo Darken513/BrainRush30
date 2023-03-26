@@ -4,7 +4,7 @@ const controller = require('../controllers/test.controller');
 const router = express.Router();
 
 router.get('/generate/:day', controller.generateTest);
-router.get('/grade', controller.gradeTest);
+router.post('/grade', controller.gradeTest);
 router.get('/viewold', controller.viewAttempt);
 
 module.exports = router;

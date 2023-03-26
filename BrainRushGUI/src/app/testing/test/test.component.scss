@@ -1,0 +1,49 @@
+#test-wrapper::before{
+    z-index: -1;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: " ";
+    height: 500px;
+    width: 750px;
+    background: #9dc449;
+    border-radius: 20px;
+    transform: rotate(5deg);
+}
+#test-wrapper::after{
+    z-index: -1;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: " ";
+    height: 480px;
+    margin-top: 10px;
+    width: 750px;
+    background: #49c49b;
+    border-radius: 20px;
+    transform: rotate(-5deg);
+}
+#test-wrapper{
+    transition: 1s;
+    position: absolute;
+    top: -100vh;
+    left: calc((100vw - 750px) / 2);
+    height: 500px;
+    width: 750px;
+    background: #222222;
+    border-radius: 20px;
+    .test-container-inner{
+        height: 100%;
+        width: 100%;
+        padding: 30px;
+    }
+    .test-step-morph{
+        width: 100%;
+        margin-top: 30px;
+        height: calc(100% - 50px);
+        background-color: rgb(38, 38, 38);
+        border-radius: 10px;
+    }
+}

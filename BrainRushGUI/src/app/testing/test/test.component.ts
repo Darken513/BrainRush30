@@ -9,8 +9,10 @@ import { TestingService } from '../testing.service';
 })
 export class TestComponent implements OnInit {
   testWrapper: any;
-  gk_test: any;
   displayModal: boolean = false;
+  loading: boolean = true;
+  currentStep: number = 0;
+  tests: Array<any> | undefined;
   constructor(
     private testingService: TestingService,
     private router: Router,
@@ -29,16 +31,33 @@ export class TestComponent implements OnInit {
   treatCaseNew(day: number) {
     this.testingService.generateTest(day).subscribe({
       next: (res) => {
+        this.loading = false;
         this.testWrapper = res;
-        if (this.testWrapper) {
-          this.gk_test = this.testWrapper.test.tests.find((val: any) => val.type == "GK")
-        }
+        this.tests = this.testWrapper.test.tests;
+        setTimeout(() => {
+          let elm = document.getElementById('test-wrapper');
+          elm!.style!.top = 'calc((100vh - 500px) / 2)'
+        }, 200);
       },
       error: (error) => {
         this.displayModal = true;
         return;
       }
     })
+  }
+  nextStep() {
+    let curr = this.currentStep;
+    if (curr == this.tests!.length - 1) {
+      this.testingService.gradeTest(this.testWrapper).subscribe({
+        next: (res) => { },
+        error: (err) => { }
+      });
+      return;
+    }
+    this.currentStep = -1; //hack
+    setTimeout(() => {
+      this.currentStep = curr + 1;
+    }, 150)
   }
   redirect() {
     this.router.navigate(['/home']);

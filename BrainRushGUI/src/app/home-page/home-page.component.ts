@@ -22,7 +22,7 @@ export class HomePageComponent implements OnInit {
     private authService: AuthService,
     private homeService: HomeService,
     private notificationService: NotificationService,
-    private router: Router,
+    public router: Router,
   ) {
     this.daysProgress = this.daysProgress.map((val, idx) => {
       return {
@@ -32,18 +32,24 @@ export class HomePageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.homeService.fetchGeneral().subscribe(res => {
-      this.fetchedGeneral = res;
-      this.currentDay = this.fetchedGeneral.length + 1;
-      this.fetchedGeneral.forEach((dayDetail, index) => {
-        this.daysProgress[index].grade = this.getGrade(dayDetail.score);
-        this.daysProgress[index].details = dayDetail;
-      })
-    });
+    this.homeService.fetchGeneral().subscribe(
+      {
+        next: res => {
+          this.fetchedGeneral = res;
+          this.currentDay = this.fetchedGeneral.filter(attmpt => attmpt.score >= attmpt.passing_score).length + 1;
+          this.fetchedGeneral.forEach((dayDetail, index) => {
+            this.daysProgress[index].grade = this.getGrade(dayDetail.score, dayDetail.passing_score);
+            this.daysProgress[index].details = dayDetail;
+          })
+        }
+      }
+    );
     this.currUser = this.authService.getCurrentUser();
   }
 
-  getGrade(score: number) {
+  getGrade(score: number, passing_score: number) {
+    if (score < passing_score)
+      return 'failed'
     if (score <= 60)
       return "acceptable"
     if (score < 80)

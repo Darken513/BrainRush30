@@ -1,4 +1,23 @@
-<div>
-    <button (click)="speak()" [disabled]="isSpeaking">Speak</button>
-    <!-- <button (click)="stop()" [disabled]="!isSpeaking">Stop</button> -->
+<div class="hint" *ngIf="!readOnly && !ready">
+    <h1>You will listen to a short text <span class="hint-important">once</span>, you have to <span class="hint-important">understand and memorize the context</span> and select the words that has the same context later on.</h1>
+    <button class="btn btn-primary" (click)="initTest()">Ready !</button>
+</div>
+
+<div *ngIf="readOnly || ready" class="test-question">
+    <button class="speak" (click)="speak()" [disabled]="listened">Speak <i class="fa fa-play-circle" aria-hidden="true"></i></button>
+    <div class="keywords-btns-container">
+        <ng-container *ngFor="let word of displayedKw; let idx=index">
+            <div [ngClass]="{
+                'unselected':!word.selected
+            }" class="keyword-btn" (click)="onKWBtnClick(idx)">
+                {{word.text}}
+            </div>
+        </ng-container>
+    </div>
+    <button [ngStyle]="{
+        'background-color':isLast?'#49c49b':'#9dc449',
+        'opacity':canVisitNext()?'1':'0',
+        'pointerEvents':canVisitNext()?'auto':'none'
+    }" class="btn btn-primary nextBtn" (click)="saveAndExit()">{{isLast?"Finish test":"Next"}} <i class="fa"
+            [ngClass]="{'fa-check':isLast,'fa-arrow-right':!isLast}" aria-hidden="true"></i></button>
 </div>

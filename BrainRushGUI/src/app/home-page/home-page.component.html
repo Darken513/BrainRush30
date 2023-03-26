@@ -22,8 +22,8 @@
                     <div class="dif-bar" *ngFor="let diff of dayDetail.difficulty"></div>
                 </div>
                 <div class="grade-container">
-                    <p *ngIf="currentDay>idx+1" class="{{dayDetail.grade}}">{{dayDetail.grade}}</p>
-                    <p *ngIf="currentDay<=idx+1">Pending</p>
+                    <p *ngIf="currentDay>=idx+1" class="{{dayDetail.grade?dayDetail.grade:''}}">{{dayDetail.grade?dayDetail.grade:'Pending'}}</p>
+                    <p *ngIf="currentDay<idx+1">Pending</p>
                 </div>
             </div>
         </div>

@@ -1,5 +1,17 @@
-<app-keywords-test [gk_test]="gk_test"></app-keywords-test>
-
+<app-loading *ngIf="loading"></app-loading>
+<div id="test-wrapper" *ngIf="tests">
+    <div class="test-container-inner">
+        <app-progress-bar [tests]="tests" [currentStep]="currentStep"></app-progress-bar>
+        <div class="test-step-morph" *ngIf="currentStep!=-1">
+            <app-keywords-test [isLast]="currentStep==tests.length-1" (next)="nextStep()"
+                *ngIf="tests[currentStep].type=='GK'" [test]="tests[currentStep]"></app-keywords-test>
+            <app-text-to-speech [isLast]="currentStep==tests.length-1" (next)="nextStep()"
+                *ngIf="tests[currentStep].type=='TTS'" [test]="tests[currentStep]"></app-text-to-speech>
+            <app-text-to-hide [isLast]="currentStep==tests.length-1" (next)="nextStep()"
+                *ngIf="tests[currentStep].type=='TH'" [test]="tests[currentStep]"></app-text-to-hide>
+        </div>
+    </div>
+</div>
 <div class="modal-question-container" *ngIf="displayModal">
     <div class="modal-question">
         <h1>Unauthorized acces !</h1>

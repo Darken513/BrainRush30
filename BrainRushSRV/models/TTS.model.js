@@ -70,3 +70,15 @@ exports.getRandByDifficulty = async (difficulty) => {
         return { error: err.message };
     }
 };
+exports.updateAnswerById = async (id, answer) => {
+    try {
+        return await db_utils.runSync(
+            db,
+            `UPDATE GENERATED_TTS_TH SET answer = ? WHERE id = ?`,
+            [answer, id]
+        );
+    } catch (err) {
+        console.log(err);
+        return { error: err.message };
+    }
+}

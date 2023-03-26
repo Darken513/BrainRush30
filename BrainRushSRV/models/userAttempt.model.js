@@ -6,7 +6,7 @@ const testDB = require('./test.model')
 
 exports.createNew = async (day, user_id) => {
     try {
-        let newTest = await testDB.createNew(day, 2, 2, 2) //todo: remove magic variable
+        let newTest = await testDB.createNew(day, 1, 1, 1) //todo: remove magic variable
         let newAttempt = await db_utils.runSync(db, `INSERT INTO USER_ATTEMPTS (user_id, test_id) VALUES (?,?)`, [user_id, newTest.id]);
         let toret = { id: newAttempt.lastID, test: newTest }
         return toret;
@@ -68,7 +68,8 @@ exports.updateScoreById = async (ua_id, score) => {
     await db_utils.runSync(db, updateQuery, [score, ua_id]);
 }
 exports.clearUnfinished = async (user_id) => {
-    let query1 = ` DELETE FROM TESTS WHERE id in 
+    //todo: this should also delete all extrat details related to generated tss th gk or else it will bind them to ur test
+    /* let query1 = ` DELETE FROM TESTS WHERE id in 
         ( SELECT test_id FROM USER_ATTEMPTS WHERE user_id = ? AND score IS NULL );`;
     let query2 = `DELETE FROM USER_ATTEMPTS WHERE id in 
         ( SELECT test_id FROM USER_ATTEMPTS WHERE user_id = ? AND score IS NULL );`;
@@ -78,13 +79,13 @@ exports.clearUnfinished = async (user_id) => {
     } catch (err) {
         console.log(err);
         return { error: err.message };
-    }
+    } */
 }
 exports.fetchGeneralDetails = async (user_id) => {
-    let query = ` SELECT ua.*, day, max(score)
+    let query = ` SELECT ua.*, day, max(score), passing_score
         FROM USER_ATTEMPTS ua
         JOIN TESTS ON ua.test_id = TESTS.id
-        WHERE user_id = ?
+        WHERE user_id = ? AND score is not null
         GROUP BY day 
         ORDER BY day
     `;
@@ -98,7 +99,7 @@ exports.fetchGeneralDetails = async (user_id) => {
 }
 exports.fetchCurrentDay = async (user_id) => {
     let query = ` SELECT *, max(day) FROM USER_ATTEMPTS ua
-        JOIN TESTS on TESTS.id = ua.test_id WHERE user_id = ? AND score IS NOT NULL;
+        JOIN TESTS on TESTS.id = ua.test_id WHERE user_id = ? AND score IS NOT NULL AND score >= passing_score;
     `;
     try {
         let toret = await db_utils.getSync(db, query, [user_id]);
@@ -107,4 +108,30 @@ exports.fetchCurrentDay = async (user_id) => {
         console.log(err);
         return { error: err.message };
     }
+}
+exports.gradeTestAndFlush = async (testResult) => {
+    let testDetails = testDB.getByIdShort(testResult.id)
+    let toret = { totalGrade: 0, textToSpeechGrade: 0, generatedKwGrade: 0, textToHideGrade: 0, passing_grade: testDetails.passing_grade }
+    for (const idx in testResult.test.tests) {
+        let test = testResult.test.tests[idx];
+        switch (test.type) {
+            case 'TTS':
+                toret.textToSpeechGrade += await testDB.gradeTTS_TH(test)
+                break;
+            case 'TH':
+                toret.textToHideGrade += await testDB.gradeTTS_TH(test)
+                break;
+            case 'GK':
+                toret.generatedKwGrade += await testDB.gradeGK(test)
+                break;
+            default:
+                break;
+        }
+    }
+    toret.textToSpeechGrade = toret.textToSpeechGrade / testResult.test.tests.filter(ts => ts.type == 'TTS').length;
+    toret.textToHideGrade = toret.textToHideGrade / testResult.test.tests.filter(ts => ts.type == 'TH').length;
+    toret.generatedKwGrade = toret.generatedKwGrade / testResult.test.tests.filter(ts => ts.type == 'GK').length;
+    toret.totalGrade = (toret.textToHideGrade + toret.textToSpeechGrade + toret.generatedKwGrade) / testResult.test.tests.length;
+    testDB.updateScoreById(testResult.id, toret.totalGrade);
+    return toret;
 }

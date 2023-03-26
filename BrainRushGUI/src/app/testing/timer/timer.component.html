@@ -1,0 +1,7 @@
+<h1 [ngStyle]="{
+    'color':seconds>initSeconds/2? '#81d145' :
+            seconds>initSeconds/4? 'yellow' :
+            '#ff4040'
+}">
+    {{seconds<=9?'0'+seconds:seconds}}
+</h1>

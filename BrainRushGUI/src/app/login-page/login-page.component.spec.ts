@@ -5,6 +5,7 @@ import { AuthService } from '../auth.service';
 import { NotificationService } from '../notification.service';
 import { of } from 'rxjs';
 import { HttpClient, HttpHandler } from '@angular/common/http';
+import { HomeService } from '../home.service';
 
 describe('LoginPageComponent', () => {
   let component: LoginPageComponent;
@@ -18,6 +19,7 @@ describe('LoginPageComponent', () => {
       declarations: [ LoginPageComponent ],
       imports: [ ReactiveFormsModule ],
       providers: [
+        HomeService,
         FormBuilder,
         HttpClient,
         HttpHandler,

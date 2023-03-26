@@ -1,0 +1,68 @@
+.loading-container{
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    background-color: #222222cc;
+    top: 0;
+    left: 0;
+}
+.loading-center{
+    position: fixed;
+    height: 250px;
+    width: 250px;
+    top: calc(calc(100vh - 250px) / 2);
+    left: calc(calc(100vw - 250px) / 2);
+    h1::after{
+        content: '...';
+        animation-name: points-animation;
+        animation-duration: 1.2s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        border-radius: 10px;
+    }
+    h1{
+        color: white;
+        font-size: 2.3rem;
+        margin-left: 55px;
+        font-weight: 600;
+    }
+    .loading-bar{
+        height: 15px;
+        background-color: #464646;
+        border-radius: 10px;
+        overflow: hidden;
+        .loading-obj{
+            height: 15px;
+            background-color: greenyellow;
+            width: 55px;
+            animation-name: move-leftright;
+            animation-duration: 1.2s;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+            border-radius: 10px;
+        }
+    }
+}
+
+@keyframes move-leftright{
+    0%{
+        margin-left: -45px;
+    }
+    100%{
+        margin-left: 250px;
+    }
+}
+@keyframes  points-animation{
+    0%{
+        content: '';
+    }
+    30%{
+        content: '.';
+    }
+    60%{
+        content: '..';
+    }
+    100%{
+        content: '...';
+    }
+}

@@ -1,20 +1,20 @@
 <div class="hint" *ngIf="!readOnly && !ready">
-    <h1>A sentence will appear for a short duration, you have to <span class="hint-important">memorize the order</span> of the words and position them correctly later on.</h1>
+    <h1>A sentence will appear for a short duration, you have to <span class="hint-important">understand and memorize
+            the context</span></h1>
     <button class="btn btn-primary" (click)="initTest()">Ready !</button>
 </div>
 <div *ngIf="!readOnly && ready && !timeEnded" class="test-timer">
     <h1>{{sentence}}</h1>
-    <app-timer (timesUp)="timeEnded=true" [seconds]="displaySeconds" ></app-timer>
+    <app-timer (timesUp)="timeEnded=true" [seconds]="displaySeconds"></app-timer>
 </div>
 <div *ngIf="readOnly || (ready && timeEnded)" class="test-question">
-    <div class="keywords-placeholder">
-        <div class="keyword-placeholder" (click)="onSelectedKWBtnClick(idx)" *ngFor="let word of selectedOrder; let idx=index">
-            {{word.text}}
-        </div>
-    </div>
+    <h1 class="sub-hint"><span class="hint-important">Select</span> the keywords that has the <span
+            class="hint-important">same context as the sentence</span> displayed earlier</h1>
     <div class="keywords-btns-container">
-        <ng-container *ngFor="let word of shuffledWords; let idx=index">
-            <div *ngIf="!word.selected" class="keyword-btn" (click)="onKWBtnClick(idx)">
+        <ng-container *ngFor="let word of displayedKw; let idx=index">
+            <div [ngClass]="{
+                'unselected':!word.selected
+            }" class="keyword-btn" (click)="onKWBtnClick(idx)">
                 {{word.text}}
             </div>
         </ng-container>

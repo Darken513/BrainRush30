@@ -15,7 +15,10 @@ export class TestingService {
     private http: HttpClient
   ) { }
 
-  public generateTest(day:number): Observable<any> {
+  public generateTest(day: number): Observable<any> {
     return this.http.get<{ response: any }>(`${this.apiUrl}/generate/${day}`);
+  }
+  public gradeTest(testRes: any): Observable<any> {
+    return this.http.post<{ response: any }>(`${this.apiUrl}/grade`, testRes);
   }
 }

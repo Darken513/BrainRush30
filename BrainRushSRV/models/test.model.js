@@ -8,6 +8,8 @@ const k_g_kDB = require('./k_gen_k.model')
 const keywBD = require('./keyword.model')
 const ttsBD = require('./TTS.model')
 
+const toleration = 1;
+
 function NbrKeywByDay(day) {
     return Math.floor(0.207 * day + 3.793);
 }
@@ -81,7 +83,7 @@ exports.getAll_TTSbased_byTestId = async (test_id, isTH) => {
         let res = await db_utils.getAllSync(db, query, [test_id, isTH]);
         const mappedRes = _.map(res, (value) => {
             value.type = value.isTH ? 'TH' : 'TTS';
-            return _.omit(value, ['day', 'passing_score', 'answer', 'test_id', 'TTS_id', 'keywords'])
+            return _.omit(value, ['day', 'test_id', 'TTS_id']) //todo omit keywords if you dont want the user to get acces to the answer
         });
         return mappedRes
     } catch (err) {
@@ -131,6 +133,43 @@ exports.getById = async (id) => {
         toret.tests.push(...(await exports.getAll_GK_byTestId(id)));
         toret.tests.push(...(await exports.getAll_TTSbased_byTestId(id)));
         return toret;
+    } catch (err) {
+        console.log(err);
+        return { error: err.message };
+    }
+}
+exports.gradeTTS_TH = async (test) => {
+    let answers = test.answer.split(',').map(word => word.trim());
+    let allTestDetail = await ttsBD.getById(test.id)
+
+    let correctAns = allTestDetail.keywords.split(',').map(word => word.trim());
+    let communAns = _.intersection(answers, correctAns);
+    let missingAns = correctAns.length - communAns.length;
+    let wrongAns = _.difference(answers, correctAns);
+    let result = communAns.length - missingAns - (wrongAns.length ? wrongAns.length - toleration : 0);
+
+    await ttsBD.updateAnswerById(allTestDetail.id, test.answer)
+
+    return result < 0 ? 0 : Math.round(result / communAns.length * 100);
+}
+exports.gradeGK = async (test) => {
+    let answers = test.answer.split(',').map(word => word.trim());
+    let result = answers.reduce((toret, word, index) => {
+        toret += word == test.keywords[index].word ? 1 : 0;
+        return toret
+    }, 0)
+
+    await keywBD.updateAnswerById(test.id, test.answer)
+
+    return result < 0 ? 0 : Math.round(result / answers.length * 100);
+}
+exports.updateScoreById = async (id, score) => {
+    try {
+        return await db_utils.runSync(
+            db,
+            `UPDATE USER_ATTEMPTS SET score = ? WHERE test_id = ?`,
+            [score, id]
+        );
     } catch (err) {
         console.log(err);
         return { error: err.message };

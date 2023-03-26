@@ -1,0 +1,31 @@
+.hint {
+
+    h1{
+        top: 55px;
+    }
+    button{
+        bottom: 135px;
+    }
+}
+button.nextBtn{
+    bottom: 60px;
+}
+h1.sub-hint{
+    font-size: 1.2rem;
+    width: 60%;
+    margin: auto;
+    margin-bottom: 20px;
+    span.hint-important {
+        color: greenyellow;
+        border-bottom: 1px solid greenyellow;
+    }
+}
+.test-question {
+    padding-top: 20px;
+}
+.test-timer {
+    padding-top: 70px;
+}
+.test-question .keywords-btns-container {
+    padding-top: 0;
+}
