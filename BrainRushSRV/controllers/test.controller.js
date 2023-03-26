@@ -4,8 +4,8 @@ const jwtService = require("../services/jwtservice")
 exports.generateTest = async (req, res) => {
     let userDetails = await jwtService.verifySync(req.headers.authorization)
     let currentDay = await uaDB.fetchCurrentDay(userDetails.id);
-    if(currentDay<req.params.day){
-        res.status(403).json({error:'Unauthorized access'})
+    if (currentDay < req.params.day) {
+        res.status(403).json({ error: 'Unauthorized access' })
         return;
     }
     let userAttemp = await uaDB.createNew(req.params.day, userDetails.id)

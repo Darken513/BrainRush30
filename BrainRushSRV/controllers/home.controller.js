@@ -8,10 +8,4 @@ exports.fetchGeneralDetails = async (req, res) => {
     res.json(toret);
 }
 exports.viewAttempt = async (req, res) => {
-    /*
-        SELECT ua.*, max(score)
-        FROM USER_ATTEMPTS ua
-        JOIN TESTS ON ua.test_id = TESTS.id
-        GROUP BY day
-    */
 };

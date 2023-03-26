@@ -7,8 +7,8 @@ import { SignupPageComponent } from './signup-page/signup-page.component';
 import { TestComponent } from './testing/test/test.component';
 
 const routes: Routes = [
-  { path: 'auth/login', component: LoginPageComponent, canActivate:[AuthGuard] },
-  { path: 'auth/signup', component: SignupPageComponent, canActivate:[AuthGuard]},
+  { path: 'auth/login', component: LoginPageComponent, canActivate: [AuthGuard] },
+  { path: 'auth/signup', component: SignupPageComponent, canActivate: [AuthGuard] },
   { path: 'home', component: HomePageComponent },
   { path: 'test', component: TestComponent },
   { path: 'test/new/:day', component: TestComponent },

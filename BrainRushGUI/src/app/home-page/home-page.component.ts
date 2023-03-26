@@ -16,7 +16,7 @@ export class HomePageComponent implements OnInit {
   fetchedGeneral!: Array<any>;
   currentDay: number = 1;
   currUser: any;
-  displayModal:boolean = false;
+  displayModal: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -34,7 +34,7 @@ export class HomePageComponent implements OnInit {
   ngOnInit(): void {
     this.homeService.fetchGeneral().subscribe(res => {
       this.fetchedGeneral = res;
-      this.currentDay = this.fetchedGeneral.length;
+      this.currentDay = this.fetchedGeneral.length + 1;
       this.fetchedGeneral.forEach((dayDetail, index) => {
         this.daysProgress[index].grade = this.getGrade(dayDetail.score);
         this.daysProgress[index].details = dayDetail;
@@ -51,18 +51,18 @@ export class HomePageComponent implements OnInit {
     return "Excelent"
   }
 
-  cardClicked(idx: number){
-    if(idx > this.currentDay){
+  cardClicked(idx: number) {
+    if (idx > this.currentDay) {
       this.notificationService.showNotification('Error', 'Test is yet to be locked')
       return;
     }
-    if(idx == this.currentDay){
+    if (idx == this.currentDay) {
       this.displayModal = true;
       return;
     }
     //else should navigate to the old attempt
   }
-  initNewTest(){
+  initNewTest() {
     this.router.navigate(['/test/new', this.currentDay]);
   }
   logout(): void {
