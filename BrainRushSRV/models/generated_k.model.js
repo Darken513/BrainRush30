@@ -7,7 +7,7 @@ exports.createNew = async (test_id) => {
     try {
         return await db_utils.runSync(db, `INSERT INTO GENERATED_KEYWORDS (test_id) VALUES (?)`, [test_id]);
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         return { error: err.message };
     }
 }
@@ -17,7 +17,7 @@ exports.getById = async (id) => {
         let row = await db_utils.getSync(db, query, [id]);
         return row ? row : undefined;
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         return { error: err.message };
     }
 }
@@ -26,7 +26,7 @@ exports.getAllKeywordsByGKId = async (gk_id) => {
     try {
         return await db_utils.getAllSync(db, query, [gk_id]);
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         return { error: err.message };
     }
 }

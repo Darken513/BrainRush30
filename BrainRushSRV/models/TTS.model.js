@@ -10,7 +10,7 @@ exports.createNew = async (text, keywords, difficulty) => {
             [text, keywords, difficulty]
         );
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         return { error: err.message };
     }
 };
@@ -20,7 +20,7 @@ exports.getById = async (id) => {
         let row = await db_utils.getSync(db, query, [id]);
         return row ? row : undefined;
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         return { error: err.message };
     }
 };
@@ -31,7 +31,7 @@ exports.getAllByIds = async (idList) => {
         let rows = await db_utils.getAllSync(db, query, idList);
         return rows ? rows : [];
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         return { error: err.message };
     }
 };
@@ -40,7 +40,7 @@ exports.getAll = async () => {
         let rows = await db_utils.getAllSync(db, `SELECT * FROM TEXT_TO_SPEECH`);
         return rows ? rows : [];
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         return { error: err.message };
     }
 };
@@ -53,7 +53,7 @@ exports.getAllByDifficulty = async (difficulty) => {
         );
         return rows ? rows : [];
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         return { error: err.message };
     }
 };
@@ -66,7 +66,7 @@ exports.getRandByDifficulty = async (difficulty) => {
         );
         return rows;
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         return { error: err.message };
     }
 };

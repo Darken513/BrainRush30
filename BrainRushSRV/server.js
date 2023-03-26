@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const authRouter = require('./routers/auth.router');
 const testRouter = require('./routers/test.router');
+const homeRouter = require('./routers/home.router');
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database("./database.db");
 const db_utils = require('./services/database')
@@ -13,6 +14,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use('/auth', authRouter);
 app.use('/test', testRouter);
+app.use('/home', homeRouter);
 
 async function init() {
   db_utils.initDataBase(db);

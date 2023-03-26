@@ -21,7 +21,7 @@ exports.getByEmail = async (email) => {
         }
         return row;
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         return { error: err.message };
     }
 }
@@ -31,7 +31,7 @@ exports.getById = async (id) => {
         let row = await db_utils.getSync(db, query, [id]);
         return row ? row : undefined; //refactor this into a base model class
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         return { error: err.message };
     }
 }
@@ -49,7 +49,7 @@ exports.getByEmailAndPassword = async (email, plaintextPassword) => {
             return undefined;
         }
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         return { error: err.message };
     }
 }
@@ -58,7 +58,7 @@ exports.getAll = async () => {
         let rows = await db_utils.getAllSync(db, `SELECT * FROM USERS`);
         return rows ? rows : [];
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         return { error: err.message };
     }
 }

@@ -11,7 +11,7 @@ exports.createNew = async (test_id, TTS_id, displayed_keywords, isTH) => {
             [test_id, TTS_id, displayed_keywords, isTH]
         );
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         return { error: err.message };
     }
 };

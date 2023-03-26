@@ -67,7 +67,7 @@ exports.getAll_GK_byTestId = async (test_id) => {
         });
         return mappedRes
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         return { error: err.message };
     }
 }
@@ -85,7 +85,7 @@ exports.getAll_TTSbased_byTestId = async (test_id, isTH) => {
         });
         return mappedRes
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         return { error: err.message };
     }
 }
@@ -108,7 +108,7 @@ exports.createNew = async (day, nbr_genKW, nbr_genTTS, nbr_genTH) => {
         toret.tests.push(...(await exports.getAll_TTSbased_byTestId(newTest.lastID)));
         return toret;
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         return { error: err.message };
     }
 }
@@ -118,7 +118,7 @@ exports.getByIdShort = async (id) => {
         let row = await db_utils.getSync(db, query, [id]);
         return row ? row : undefined;
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         return { error: err.message };
     }
 };
@@ -132,7 +132,7 @@ exports.getById = async (id) => {
         toret.tests.push(...(await exports.getAll_TTSbased_byTestId(id)));
         return toret;
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         return { error: err.message };
     }
 }

@@ -14,9 +14,8 @@ exports.getById = async (id) => {
     try {
         let row = await db_utils.getSync(db, query, [id]);
         return row ? row : undefined;
-
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         return { error: err.message };
     }
 }
@@ -27,7 +26,7 @@ exports.getAllByIds = async (idList) => {
         let rows = await db_utils.getAllSync(db, query, idList);
         return rows ? rows : [];
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         return { error: err.message };
     }
 }
@@ -36,7 +35,7 @@ exports.getAll = async () => {
         let rows = await db_utils.getAllSync(db, `SELECT * FROM KEYWORDS`);
         return rows ? rows : [];
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         return { error: err.message };
     }
 }
@@ -45,7 +44,7 @@ exports.getAllByDifficulty = async (difficulty) => {
         let rows = await db_utils.getAllSync(db, `SELECT * FROM KEYWORDS WHERE difficulty = ?`, [difficulty]);
         return rows ? rows : [];
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         return { error: err.message };
     }
 }
@@ -54,7 +53,7 @@ exports.getRandNByDifficulty = async (n, difficulty) => {
         let rows = await db_utils.getAllSync(db, `SELECT * FROM KEYWORDS WHERE difficulty = ? ORDER BY RANDOM() LIMIT ${n}`, [difficulty]);
         return rows ? rows : [];
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         return { error: err.message };
     }
 }
@@ -63,7 +62,7 @@ exports.getRandNbr = async (n) => {
         let rows = await db_utils.getAllSync(db, `SELECT * FROM KEYWORDS ORDER BY RANDOM() LIMIT ${n}`);
         return rows ? rows : [];
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         return { error: err.message };
     }
 }

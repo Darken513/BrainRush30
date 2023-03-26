@@ -16,6 +16,6 @@ export class TestingService {
   ) { }
 
   public generateTest(day:number): Observable<any> {
-    return this.http.get<{ response: any }>(`${this.apiUrl}/generate`);
+    return this.http.get<{ response: any }>(`${this.apiUrl}/generate/${day}`);
   }
 }
