@@ -111,3 +111,30 @@
     transform: rotate(320deg);
     font-size: 40px !important;
 }
+
+.outer-btns-container{
+    position: absolute;
+    left: 270px;
+    top: -20px;
+    button{
+        width: 105px;
+        border: none;
+        color: #262626;
+        font-weight: 500;
+        border-radius: 15px;
+    }
+    .standAlone{
+        width: 210px !important;
+        border-radius: 15px !important;
+    }
+    button:first-of-type{
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        background-color: #49c49b;
+    }
+    button:last-of-type{
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        background-color: #f44336;
+    }
+}

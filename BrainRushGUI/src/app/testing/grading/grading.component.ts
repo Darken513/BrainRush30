@@ -10,6 +10,7 @@ import * as _ from 'lodash';
 export class GradingComponent implements OnInit {
   @Input() generalResult: any;
   @Input() testDetails: any;
+  @Input() day: number = 0;
   currentStep: number = -1;
   generalGradesArr: Array<any> = new Array<any>();
   constructor(
@@ -33,11 +34,13 @@ export class GradingComponent implements OnInit {
           return undefined;
       }
     }).filter(x => x);
-    console.log(this.generalGradesArr);
   }
 
   redirect() {
     this.router.navigate(['/home']);
+  }
+  retakeTest(){
+    this.router.navigate(['/test/new', this.day]);
   }
 
   nextStep() {
