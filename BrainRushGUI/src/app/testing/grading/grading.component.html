@@ -1,7 +1,7 @@
 <div class="review-container-inner">
     <div class="outer-btns-container">
-        <button *ngIf="currentStep!=-1 && currentStep!=testDetails.length-1" class="btn btn-primary" (click)="redirect()">Home</button>
-        <button [ngClass]="{'standAlone':(currentStep==-1 || currentStep==testDetails.length-1)}" class="btn btn-primary" (click)="retakeTest()">Retry</button>
+        <button [ngClass]="{'tansitionBtn':currentStep == -2}" *ngIf="currentStep!=-1 && currentStep!=testDetails.length-1" class="btn btn-primary" (click)="redirect()">Home</button>
+        <button [ngClass]="{'tansitionBtn':currentStep == -2 ,'standAlone':(currentStep==-1 || currentStep==testDetails.length-1)}" class="btn btn-primary" (click)="retakeTest()">Retry</button>
     </div>
     <app-progress-bar [tests]="testDetails" [currentStep]="currentStep" [isFilled]="true"></app-progress-bar>
     <div *ngIf="currentStep==-1">
