@@ -8,6 +8,7 @@ import { LoadingComponent } from './loading/loading.component';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { TextToHideComponent } from './text-to-hide/text-to-hide.component';
 import { TimerComponent } from './timer/timer.component';
+import { GradingComponent } from './grading/grading.component';
 
 
 
@@ -19,7 +20,8 @@ import { TimerComponent } from './timer/timer.component';
     LoadingComponent,
     ProgressBarComponent,
     TextToHideComponent,
-    TimerComponent
+    TimerComponent,
+    GradingComponent
   ],
   imports: [
     CommonModule,

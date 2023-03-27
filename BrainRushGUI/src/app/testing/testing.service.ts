@@ -18,6 +18,9 @@ export class TestingService {
   public generateTest(day: number): Observable<any> {
     return this.http.get<{ response: any }>(`${this.apiUrl}/generate/${day}`);
   }
+  public getTestReview(test_id: number): Observable<any> {
+    return this.http.get<{ response: any }>(`${this.apiUrl}/review/${test_id}`);
+  }
   public gradeTest(testRes: any): Observable<any> {
     return this.http.post<{ response: any }>(`${this.apiUrl}/grade`, testRes);
   }

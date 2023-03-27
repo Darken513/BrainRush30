@@ -15,8 +15,10 @@ export class HomePageComponent implements OnInit {
   daysProgress: Array<any> = new Array(30).fill({});
   fetchedGeneral!: Array<any>;
   currentDay: number = 1;
+  selected4Review: number = -1;
   currUser: any;
   displayModal: boolean = false;
+  displayModal2: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -66,7 +68,11 @@ export class HomePageComponent implements OnInit {
       this.displayModal = true;
       return;
     }
-    //else should navigate to the old attempt
+    this.displayModal2 = true;
+    this.selected4Review = idx
+  }
+  initReview() {
+    this.router.navigate(['/test/review', this.fetchedGeneral[this.selected4Review - 1].test_id]);
   }
   initNewTest() {
     this.router.navigate(['/test/new', this.currentDay]);

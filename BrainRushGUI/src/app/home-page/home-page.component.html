@@ -37,3 +37,10 @@
         <button class="btn btn-primary" (click)="initNewTest()">Yes!</button>
     </div>
 </div>
+<div class="modal-question-container" *ngIf="displayModal2">
+    <div class="modal-question"> 
+        <h1>Check day {{selected4Review}} attempt review ?</h1>
+        <button class="btn btn-secondary" (click)="displayModal2=!displayModal2">Later</button>
+        <button class="btn btn-primary" (click)="initReview()">Yes!</button>
+    </div>
+</div>

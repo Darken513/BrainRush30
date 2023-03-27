@@ -20,5 +20,7 @@ exports.gradeTest = async (req, res) => {
   res.json({userAttempResult});
 };
 exports.viewAttempt = async (req, res) => {
-
+  let test_id = req.params.id;
+  let userAttemp = await uaDB.getByTestId(test_id)
+  res.json(userAttemp)
 };

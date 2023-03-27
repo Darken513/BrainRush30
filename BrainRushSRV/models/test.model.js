@@ -75,15 +75,16 @@ exports.getAll_GK_byTestId = async (test_id) => {
 }
 exports.getAll_TTSbased_byTestId = async (test_id, isTH) => {
     let query = ` 
-        SELECT * FROM TESTS 
+        SELECT *, gtsh.id as gtsh_id FROM TESTS 
             JOIN GENERATED_TTS_TH gtsh ON TESTS.id = gtsh.test_id 
                 JOIN TEXT_TO_SPEECH tts ON tts.id = gtsh.TTS_id 
-        WHERE TESTS.id = ?`.concat(isTH ? " AND gtsh.type = ?;" : '');
+        WHERE TESTS.id = ?`.concat(isTH ? " AND gtsh.isTH = ?;" : '');
     try {
         let res = await db_utils.getAllSync(db, query, [test_id, isTH]);
         const mappedRes = _.map(res, (value) => {
             value.type = value.isTH ? 'TH' : 'TTS';
-            return _.omit(value, ['day', 'test_id', 'TTS_id']) //todo omit keywords if you dont want the user to get acces to the answer
+            value.id = value.gtsh_id;
+            return _.omit(value, ['day', 'passing_score', 'isTH', 'gtsh_id', 'test_id']) //todo omit keywords if you dont want the user to get acces to the answer
         });
         return mappedRes
     } catch (err) {
@@ -132,36 +133,53 @@ exports.getById = async (id) => {
         toret.day = temp.day;
         toret.tests.push(...(await exports.getAll_GK_byTestId(id)));
         toret.tests.push(...(await exports.getAll_TTSbased_byTestId(id)));
+        toret.tests.forEach((test) => {
+            switch (test.type) {
+                case "GK":
+                    test.score = scoreGK(test, test.answer)
+                    break;
+                case "TH":
+                    test.score = scoreTTS(test, test.answer)
+                    break;
+                case "TTS":
+                    test.score = scoreTTS(test, test.answer)
+                    break;
+                default:
+                    break;
+            }
+        })
         return toret;
     } catch (err) {
         console.log(err);
         return { error: err.message };
     }
 }
-exports.gradeTTS_TH = async (test) => {
-    let answers = test.answer.split(',').map(word => word.trim());
-    let allTestDetail = await ttsBD.getById(test.id)
-
+function scoreTTS(allTestDetail, answer) {
+    let answers = answer.split(',').map(word => word.trim());
     let correctAns = allTestDetail.keywords.split(',').map(word => word.trim());
     let communAns = _.intersection(answers, correctAns);
     let missingAns = correctAns.length - communAns.length;
     let wrongAns = _.difference(answers, correctAns);
     let result = communAns.length - missingAns - (wrongAns.length ? wrongAns.length - toleration : 0);
 
-    await ttsBD.updateAnswerById(allTestDetail.id, test.answer)
-
     return result < 0 ? 0 : Math.round(result / communAns.length * 100);
 }
-exports.gradeGK = async (test) => {
-    let answers = test.answer.split(',').map(word => word.trim());
+exports.gradeTTS_TH = async (test) => {
+    let allTestDetail = await ttsBD.getById(test.TTS_id)
+    await ttsBD.updateAnswerById(test.id, test.answer)
+    return scoreTTS(allTestDetail, test.answer);
+}
+function scoreGK(test, answer) {
+    let answers = answer.split(',').map(word => word.trim());
     let result = answers.reduce((toret, word, index) => {
         toret += word == test.keywords[index].word ? 1 : 0;
         return toret
     }, 0)
-
-    await keywBD.updateAnswerById(test.id, test.answer)
-
     return result < 0 ? 0 : Math.round(result / answers.length * 100);
+}
+exports.gradeGK = async (test) => {
+    await keywBD.updateAnswerById(test.id, test.answer)
+    return scoreGK(test, test.answer);
 }
 exports.updateScoreById = async (id, score) => {
     try {

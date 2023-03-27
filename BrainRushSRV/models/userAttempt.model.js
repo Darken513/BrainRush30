@@ -25,6 +25,16 @@ exports.getByIdShort = async (id) => {
         return { error: err.message };
     }
 };
+exports.getByTestIdShort = async (id) => {
+    const query = `SELECT * FROM USER_ATTEMPTS WHERE test_id = ?`;
+    try {
+        let row = await db_utils.getSync(db, query, [id]);
+        return row ? row : undefined;
+    } catch (err) {
+        console.log(err);
+        return { error: err.message };
+    }
+};
 exports.getById = async (id) => {
     try {
         let toret = { id }
@@ -39,6 +49,21 @@ exports.getById = async (id) => {
         return { error: err.message };
     }
 }
+exports.getByTestId = async (id) => {
+    try {
+        let toret = { test_id:id }
+        let temp = await exports.getByTestIdShort(id);
+        toret.score = temp.score;
+        toret.attempted_at = temp.attempted_at;
+        let test = await testDB.getById(temp.test_id);
+        toret.test = test;
+        return toret;
+    } catch (err) {
+        console.log(err);
+        return { error: err.message };
+    }
+}
+
 exports.getAllByUserAndDay = async (userId, day) => {
     try {
         let toret = []
@@ -111,7 +136,7 @@ exports.fetchCurrentDay = async (user_id) => {
 }
 exports.gradeTestAndFlush = async (testResult) => {
     let testDetails = testDB.getByIdShort(testResult.id)
-    let toret = { totalGrade: 0, textToSpeechGrade: 0, generatedKwGrade: 0, textToHideGrade: 0, passing_grade: testDetails.passing_grade }
+    let toret = { test_id:testResult.id, totalGrade: 0, textToSpeechGrade: 0, generatedKwGrade: 0, textToHideGrade: 0, passing_grade: testDetails.passing_grade }
     for (const idx in testResult.test.tests) {
         let test = testResult.test.tests[idx];
         switch (test.type) {
@@ -131,7 +156,7 @@ exports.gradeTestAndFlush = async (testResult) => {
     toret.textToSpeechGrade = toret.textToSpeechGrade / testResult.test.tests.filter(ts => ts.type == 'TTS').length;
     toret.textToHideGrade = toret.textToHideGrade / testResult.test.tests.filter(ts => ts.type == 'TH').length;
     toret.generatedKwGrade = toret.generatedKwGrade / testResult.test.tests.filter(ts => ts.type == 'GK').length;
-    toret.totalGrade = (toret.textToHideGrade + toret.textToSpeechGrade + toret.generatedKwGrade) / testResult.test.tests.length;
+    toret.totalGrade = Math.round((toret.textToHideGrade + toret.textToSpeechGrade + toret.generatedKwGrade) / testResult.test.tests.length);
     testDB.updateScoreById(testResult.id, toret.totalGrade);
     return toret;
 }
