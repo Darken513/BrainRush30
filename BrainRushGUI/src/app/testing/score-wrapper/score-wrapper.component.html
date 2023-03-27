@@ -1,0 +1,10 @@
+<div class="score-body">
+    <h1 class="title" id="title-{{scoreObj.id}}"></h1>
+    <div class="scorebar-wrapper">
+        <div class="passing-score"></div>
+        <div class="user-score" [ngStyle]="{
+            'width':scoreObj.scoreperc,
+            'backgroundColor':getBGColor()
+        }"></div>
+    </div>
+</div>

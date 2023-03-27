@@ -9,6 +9,7 @@ import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { TextToHideComponent } from './text-to-hide/text-to-hide.component';
 import { TimerComponent } from './timer/timer.component';
 import { GradingComponent } from './grading/grading.component';
+import { ScoreWrapperComponent } from './score-wrapper/score-wrapper.component';
 
 
 
@@ -21,7 +22,8 @@ import { GradingComponent } from './grading/grading.component';
     ProgressBarComponent,
     TextToHideComponent,
     TimerComponent,
-    GradingComponent
+    GradingComponent,
+    ScoreWrapperComponent
   ],
   imports: [
     CommonModule,

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-
+import { Router } from '@angular/router';
+import * as _ from 'lodash'
 @Component({
   selector: 'app-text-to-speech',
   templateUrl: './text-to-speech.component.html',
@@ -18,18 +19,37 @@ export class TextToSpeechComponent implements OnInit {
 
   public listened: boolean = false;
   public synth!: SpeechSynthesis;
-
-  constructor() { }
+  public correctAns:Array<string> = new Array<string>;
+  public wrongAns:Array<string> = new Array<string>;
+  constructor(
+    private router: Router,
+  ) { }
 
   ngOnInit() {
     this.textToSpeak = this.test.text;
     if (this.test.answer) {
       this.readOnly = true;
-      //todo: and display order
+      let answers = this.test.answer.split(',').map((word:string) => word.trim());
+      let correctAns = this.test.keywords.split(',').map((word:string) => word.trim());
+      this.correctAns = _.intersection(answers, correctAns);
+      this.wrongAns = _.difference(_.union(answers, correctAns), this.correctAns);
     }
     this.displayedKw = this.test.displayed_keywords.split(',').map((kw: string) => ({ text: kw.trim(), selected: false }));
     this.synth = window.speechSynthesis;
     this.synth!.cancel();
+  }
+  public getCorrectionColor(word:string){
+    if(this.wrongAns.includes(word))
+      return "#df3030"
+    if(this.correctAns.includes(word))
+      return "yellowgreen"
+    return;
+  }
+  redirect() {
+    this.router.navigate(['/home']);
+  }
+  toScorePage(){
+    this.next.emit(true);
   }
   public onKWBtnClick(index:number){
     if(!this.listened)

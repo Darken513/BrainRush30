@@ -7,10 +7,13 @@
     <app-timer (timesUp)="timeEnded=true" [seconds]="displaySeconds" ></app-timer>
 </div>
 <div *ngIf="readOnly || (ready && timeEnded)" class="test-question">
+    <h1 *ngIf="readOnly">{{sentence}}</h1>
     <div class="keywords-placeholder">
-        <div class="keyword-placeholder" (click)="onSelectedKWBtnClick(idx)" *ngFor="let word of selectedOrder; let idx=index">
-            {{word.text}}
-        </div>
+        <ng-container *ngFor="let word of selectedOrder; let idx=index">
+            <div [ngStyle]="{'color':getCorrectionColor(idx)}" class="keyword-placeholder" (click)="onSelectedKWBtnClick(idx)" >
+                {{word.text}}
+            </div>
+        </ng-container>
     </div>
     <div class="keywords-btns-container">
         <ng-container *ngFor="let word of shuffledWords; let idx=index">
@@ -19,10 +22,14 @@
             </div>
         </ng-container>
     </div>
-    <button [ngStyle]="{
+    <button *ngIf="!readOnly || (readOnly && !isLast)" [ngStyle]="{
         'background-color':isLast?'#49c49b':'#9dc449',
         'opacity':canVisitNext()?'1':'0',
         'pointerEvents':canVisitNext()?'auto':'none'
     }" class="btn btn-primary nextBtn" (click)="saveAndExit()">{{isLast?"Finish test":"Next"}} <i class="fa"
             [ngClass]="{'fa-check':isLast,'fa-arrow-right':!isLast}" aria-hidden="true"></i></button>
+    <div *ngIf="readOnly && isLast" class="btns-container">
+        <button class="btn btn-secondary" (click)="redirect()">Home</button>
+        <button class="btn btn-primary" (click)="toScorePage()">Check Scores</button>
+    </div>
 </div>

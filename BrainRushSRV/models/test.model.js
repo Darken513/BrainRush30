@@ -148,6 +148,21 @@ exports.getById = async (id) => {
                     break;
             }
         })
+        let userAttempResult = { test_id: id, totalGrade: 0, textToSpeechGrade: 0, generatedKwGrade: 0, textToHideGrade: 0, passing_grade: toret.passing_score }
+        userAttempResult.textToSpeechGrade = toret.tests
+            .filter(test => test.type == "TTS")
+            .reduce((ret, curr) => { ret += curr.score; return ret }, 0) / toret.tests
+                .filter(ts => ts.type == 'TTS').length;
+        userAttempResult.textToHideGrade = toret.tests
+            .filter(test => test.type == "TH")
+            .reduce((ret, curr) => { ret += curr.score; return ret }, 0) / toret.tests.
+                filter(ts => ts.type == 'TH').length;
+        userAttempResult.generatedKwGrade = toret.tests
+            .filter(test => test.type == "GK")
+            .reduce((ret, curr) => { ret += curr.score; return ret }, 0) / toret.tests.
+                filter(ts => ts.type == 'GK').length;
+        userAttempResult.totalGrade = Math.round((userAttempResult.textToHideGrade + userAttempResult.textToSpeechGrade + userAttempResult.generatedKwGrade) / toret.tests.length);
+        toret.userAttempResult = userAttempResult;
         return toret;
     } catch (err) {
         console.log(err);

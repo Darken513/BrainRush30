@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-grading',
@@ -8,10 +10,44 @@ import { Component, Input, OnInit } from '@angular/core';
 export class GradingComponent implements OnInit {
   @Input() generalResult: any;
   @Input() testDetails: any;
-
-  constructor() { }
+  currentStep: number = -1;
+  generalGradesArr: Array<any> = new Array<any>();
+  constructor(
+    private router: Router,
+  ) { }
 
   ngOnInit(): void {
+    console.log(this);
+    let passingScore = this.generalResult.passing_grade
+    this.generalGradesArr = _.map(this.generalResult, (val, idx) => {
+      switch (idx) {
+        case "totalGrade":
+          return { text: '<span style="color:#49c49b">Total score</span>', id: idx, score: val, passingScore }
+        case "textToSpeechGrade":
+          return { text: 'Total <span style="color:#49c49b">audible</span> memory score', id: idx, score: val, passingScore }
+        case "generatedKwGrade":
+          return { text: 'Total <span style="color:#49c49b">contextual</span> memory score', id: idx, score: val, passingScore }
+        case "textToHideGrade":
+          return { text: 'Total <span style="color:#49c49b">visual</span> memory score', id: idx, score: val, passingScore }
+        default:
+          return undefined;
+      }
+    }).filter(x => x);
+    console.log(this.generalGradesArr);
   }
 
+  redirect() {
+    this.router.navigate(['/home']);
+  }
+
+  nextStep() {
+    let curr = this.currentStep;
+    if (curr == this.testDetails!.length - 1) {
+      curr = -2;
+    }
+    this.currentStep = -2; //hack
+    setTimeout(() => {
+      this.currentStep = curr + 1;
+    }, 150)
+  }
 }

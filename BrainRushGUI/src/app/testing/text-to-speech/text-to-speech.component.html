@@ -4,20 +4,29 @@
 </div>
 
 <div *ngIf="readOnly || ready" class="test-question">
-    <button class="speak" (click)="speak()" [disabled]="listened">Speak <i class="fa fa-play-circle" aria-hidden="true"></i></button>
+    <button class="speak" [ngStyle]="{'top':readOnly?'75px':'90px'}" (click)="speak()" [disabled]="!readOnly && listened">Speak <i class="fa fa-play-circle" aria-hidden="true"></i></button>
     <div class="keywords-btns-container">
         <ng-container *ngFor="let word of displayedKw; let idx=index">
-            <div [ngClass]="{
+            <div 
+            [ngStyle]="{
+                'color':getCorrectionColor(word.text),
+                'borderColor':getCorrectionColor(word.text)
+            }"
+            [ngClass]="{
                 'unselected':!word.selected
             }" class="keyword-btn" (click)="onKWBtnClick(idx)">
                 {{word.text}}
             </div>
         </ng-container>
     </div>
-    <button [ngStyle]="{
+    <button *ngIf="!readOnly || (readOnly && !isLast)" [ngStyle]="{
         'background-color':isLast?'#49c49b':'#9dc449',
         'opacity':canVisitNext()?'1':'0',
         'pointerEvents':canVisitNext()?'auto':'none'
     }" class="btn btn-primary nextBtn" (click)="saveAndExit()">{{isLast?"Finish test":"Next"}} <i class="fa"
             [ngClass]="{'fa-check':isLast,'fa-arrow-right':!isLast}" aria-hidden="true"></i></button>
+    <div *ngIf="readOnly && isLast" class="btns-container">
+        <button class="btn btn-secondary" (click)="redirect()">Home</button>
+        <button class="btn btn-primary" (click)="toScorePage()">Check Scores</button>
+    </div>
 </div>

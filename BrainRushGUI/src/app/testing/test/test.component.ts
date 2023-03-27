@@ -37,11 +37,14 @@ export class TestComponent implements OnInit {
     this.testingService.getTestReview(test_id).subscribe({
       next: (reviewRes) => {
         this.reviewMode = true;
+        this.testRes = reviewRes.test.userAttempResult;
         this.testWrapper = reviewRes;
         this.tests = this.testWrapper.test.tests;
         this.loading = false;
-        console.log(reviewRes);
-
+        setTimeout(() => {
+          let elm = document.getElementById('test-wrapper');
+          elm!.style!.top = 'calc((100vh - 500px) / 2)'
+        }, 200);
       },
       error: (err) => { }
     })
@@ -72,10 +75,7 @@ export class TestComponent implements OnInit {
           this.testRes = res.userAttempResult;
           this.testingService.getTestReview(res.userAttempResult.test_id).subscribe({
             next: (reviewRes) => {
-              this.reviewMode = true;
-              this.testWrapper = reviewRes;
-              this.tests = this.testWrapper.test.tests;
-              this.loading = false;
+              this.router.navigate(['/test/review', reviewRes.test_id]);
             },
             error: (err) => { }
           })

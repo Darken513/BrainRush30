@@ -8,6 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class ProgressBarComponent implements OnInit {
 
   @Input() tests: Array<any> = new Array<any>();
+  @Input() isFilled: boolean = false;
   @Input() currentStep: number = 0;
   constructor() { }
 
@@ -19,6 +20,8 @@ export class ProgressBarComponent implements OnInit {
     return `calc(calc(calc(100% - 30px) / ${nbrSteps - 1}) * ${index})`
   }
   getProgressBarWidth() {
+    if(this.isFilled)
+      return '100%'
     let nbrSteps = this.tests.length;
     return `calc(calc(100% / ${nbrSteps - 1}) * ${this.currentStep})`
   }

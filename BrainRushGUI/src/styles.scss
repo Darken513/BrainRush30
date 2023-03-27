@@ -11,7 +11,7 @@ body {
     height: 100%;
     width: 100%;
     overflow: hidden;
-    /* filter: invert(1) hue-rotate(45deg); */
+    /* filter: invert(1) hue-rotate(180deg); */
 }
 
 #notification-container .notification {
@@ -85,12 +85,12 @@ body {
     position: fixed;
     z-index: 99;
     top: calc((100vh - 250px) / 2);
-    left: calc((100vw - 300px) / 2);
+    left: calc((100vw - 400px) / 2);
     height: 100px;
     padding: 15px;
     border-radius: 20px;
     box-shadow: 0 0 15px #1a1919;
-    width: 300px;
+    width: 400px;
     background: #282828;
     color: white;
     h1{

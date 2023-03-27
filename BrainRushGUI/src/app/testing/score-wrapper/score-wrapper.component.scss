@@ -1,0 +1,36 @@
+.score-body {
+    width: 100%;
+    margin: auto;
+    margin-bottom: 20px;
+
+    .scorebar-wrapper {
+        width: 100%;
+        height: 15px;
+        background: #5a5959;
+        position: relative;
+        border-radius: 15px;
+        overflow: hidden;
+
+        .passing-score {
+            width: 5px;
+            left: 40%;
+            position: absolute;
+            height: 100%;
+            background: #00000038;
+            z-index: 99;
+        }
+
+        .user-score {
+            position: absolute;
+            height: 100%;
+            background: rgb(255, 128, 128);
+        }
+    }
+
+    .title {
+        font-size: 1.3rem;
+        margin-bottom: 3px;
+        color: white;
+        text-align: center;
+    }
+}

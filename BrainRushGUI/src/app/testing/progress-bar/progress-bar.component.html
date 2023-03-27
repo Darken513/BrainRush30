@@ -4,7 +4,7 @@
     <div *ngFor="let currSubTest of tests; let idx = index" class="step-icon"
         [ngStyle]="{'left':idx?getStepIconMargin(idx):0}">
         <div class="step" [ngClass]="{
-            'step-done':idx<currentStep,
+            'step-done':(idx<currentStep || isFilled),
             'step-current':idx==currentStep
         }">
         </div>

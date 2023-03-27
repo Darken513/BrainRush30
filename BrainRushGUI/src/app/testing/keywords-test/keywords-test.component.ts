@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-keywords-test',
@@ -9,7 +10,7 @@ export class KeywordsTestComponent implements OnInit {
   @Input() test: any;
   @Input() isLast: boolean = false;
   @Output() next = new EventEmitter<boolean>();
-  
+
   readOnly: any = false;
   sentence!: string;
   ready: boolean = false;
@@ -17,12 +18,18 @@ export class KeywordsTestComponent implements OnInit {
   displaySeconds: number = 5;
   shuffledWords: Array<any> = [];
   selectedOrder: Array<any> = [];
-  constructor() { }
+  constructor(
+    private router: Router,
+  ) { }
 
   ngOnInit(): void {
     if (this.test.answer) {
       this.selectedOrder = this.test.answer.split(',').map((word: string) => ({ text: word.trim(), selected: true, idx: -1 }))
       this.readOnly = true;
+      this.sentence = this.test.keywords.reduce((toret: string, keyw: any, idx: number) => {
+        toret += keyw.word + (idx != this.test.keywords.length - 1 ? ' ' : '');
+        return toret;
+      }, '');
       return;
     }
     this.sentence = this.test.keywords.reduce((toret: string, keyw: any, idx: number) => {
@@ -35,6 +42,13 @@ export class KeywordsTestComponent implements OnInit {
     }, 0)
     this.shuffledWords = this.shuffleArray(this.test.keywords.map((kw: any) => ({ text: kw.word, selected: false })))
     this.selectedOrder = this.shuffledWords.map(word => ({ text: '........', selected: false, idx: -1 }))
+  }
+  getCorrectionColor(index: number) {
+    if (!this.readOnly)
+      return;
+    else if (this.selectedOrder[index].text == this.test.keywords[index].word)
+      return 'yellowgreen';
+    return '#df3030';
   }
   initTest() {
     this.ready = true;
@@ -69,6 +83,12 @@ export class KeywordsTestComponent implements OnInit {
       [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
+  }
+  redirect() {
+    this.router.navigate(['/home']);
+  }
+  toScorePage() {
+    this.next.emit(true);
   }
   canVisitNext() {
     return !this.shuffledWords.some(kw => !kw.selected)

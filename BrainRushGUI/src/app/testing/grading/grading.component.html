@@ -1,1 +1,39 @@
-<p>grading works!</p>
+<div class="review-container-inner">
+    <app-progress-bar [tests]="testDetails" [currentStep]="currentStep" [isFilled]="true"></app-progress-bar>
+    <div *ngIf="currentStep==-1">
+        <div class="score-circle-container">
+            <h2 class="successHint"
+                [ngStyle]="{'color':generalResult.totalGrade>=generalResult.passing_grade?'yellowgreen':'#df3030'}">
+                {{generalResult.totalGrade>=generalResult.passing_grade?'Passed!':'Failed'}}</h2>
+            <div [ngStyle]="{
+                'borderColor':generalResult.totalGrade>=generalResult.passing_grade?'yellowgreen':'#df3030'
+            }" class="scoreCircle">
+                <h1 [ngStyle]="{
+                    'left':generalResult.totalGrade<10?'66px':generalResult.totalGrade<100?'53px':'40px'
+                }">{{generalResult.totalGrade}}</h1>
+                <div [ngStyle]="{
+                    'backgroundColor':generalResult.totalGrade>=generalResult.passing_grade?'yellowgreen':'#df3030'
+                }" class="separator"></div>
+                <h1 class="the100">{{100}}</h1>
+            </div>
+            <h2>Passing score : {{generalResult.passing_grade}}</h2>
+        </div>
+        <div class="scores-bars-container">
+            <ng-container *ngFor="let score of generalGradesArr">
+                <app-score-wrapper [scoreObj]="score"></app-score-wrapper>
+            </ng-container>
+        </div>
+        <div class="btns-container">
+            <button class="btn btn-secondary" (click)="redirect()">Home</button>
+            <button class="btn btn-primary" (click)="currentStep=0">Check Answers</button>
+        </div>
+    </div>
+    <div class="test-step-morph" *ngIf="currentStep!=-1 && currentStep!=-2">
+        <app-keywords-test [isLast]="currentStep==testDetails.length-1" (next)="nextStep()"
+            *ngIf="testDetails[currentStep].type=='GK'" [test]="testDetails[currentStep]"></app-keywords-test>
+        <app-text-to-speech [isLast]="currentStep==testDetails.length-1" (next)="nextStep()"
+            *ngIf="testDetails[currentStep].type=='TTS'" [test]="testDetails[currentStep]"></app-text-to-speech>
+        <app-text-to-hide [isLast]="currentStep==testDetails.length-1" (next)="nextStep()"
+            *ngIf="testDetails[currentStep].type=='TH'" [test]="testDetails[currentStep]"></app-text-to-hide>
+    </div>
+</div>
