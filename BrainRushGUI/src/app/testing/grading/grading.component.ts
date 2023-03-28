@@ -12,6 +12,7 @@ export class GradingComponent implements OnInit {
   @Input() testDetails: any;
   @Input() day: number = 0;
   currentStep: number = -1;
+  retryModal:boolean = false;
   generalGradesArr: Array<any> = new Array<any>();
   constructor(
     private router: Router,

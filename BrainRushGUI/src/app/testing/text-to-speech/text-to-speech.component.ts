@@ -74,7 +74,6 @@ export class TextToSpeechComponent implements OnInit {
   saveAndExit() {
     if (!this.readOnly) {
       this.test.answer = this.displayedKw.filter(kw=>kw.selected).map(kw => kw.text).join(', ');
-      console.log(this.test.answer);
     }
     this.next.emit(true);
   }

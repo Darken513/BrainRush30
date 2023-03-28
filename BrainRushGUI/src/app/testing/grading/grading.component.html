@@ -1,7 +1,11 @@
 <div class="review-container-inner">
     <div class="outer-btns-container">
-        <button [ngClass]="{'tansitionBtn':currentStep == -2}" *ngIf="currentStep!=-1 && currentStep!=testDetails.length-1" class="btn btn-primary" (click)="redirect()">Home</button>
-        <button [ngClass]="{'tansitionBtn':currentStep == -2 ,'standAlone':(currentStep==-1 || currentStep==testDetails.length-1)}" class="btn btn-primary" (click)="retakeTest()">Retry</button>
+        <button [ngClass]="{'tansitionBtn':currentStep == -2}"
+            *ngIf="currentStep!=-1 && currentStep!=testDetails.length-1" class="btn btn-primary"
+            (click)="redirect()">Home</button>
+        <button
+            [ngClass]="{'tansitionBtn':currentStep == -2 ,'standAlone':(currentStep==-1 || currentStep==testDetails.length-1)}"
+            class="btn btn-primary" (click)="retryModal=true">Retry</button>
     </div>
     <app-progress-bar [tests]="testDetails" [currentStep]="currentStep" [isFilled]="true"></app-progress-bar>
     <div *ngIf="currentStep==-1">
@@ -39,5 +43,14 @@
             *ngIf="testDetails[currentStep].type=='TTS'" [test]="testDetails[currentStep]"></app-text-to-speech>
         <app-text-to-hide [isLast]="currentStep==testDetails.length-1" (next)="nextStep()"
             *ngIf="testDetails[currentStep].type=='TH'" [test]="testDetails[currentStep]"></app-text-to-hide>
+    </div>
+</div>
+
+<div class="modal-question-container" *ngIf="retryModal">
+    <div class="modal-question">
+        <h1>Do you want to take this test again ? <br> please note that the question will change, but the <span style="color:yellowgreen">difficulty level
+            remains the same</span>.</h1>
+        <button class="btn btn-secondary" (click)="retryModal=!retryModal">Later</button>
+        <button class="btn btn-primary" (click)="retakeTest()">Yes!</button>
     </div>
 </div>

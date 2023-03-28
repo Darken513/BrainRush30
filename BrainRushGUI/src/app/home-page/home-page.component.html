@@ -32,9 +32,15 @@
 
 <div class="modal-question-container" *ngIf="displayModal">
     <div class="modal-question"> 
-        <h1>Take today's test ?</h1>
-        <button class="btn btn-secondary" (click)="displayModal=!displayModal">Later</button>
-        <button class="btn btn-primary" (click)="initNewTest()">Yes!</button>
+        <ng-container *ngIf="canTakeCurrTest()">
+            <h1>Take today's test ?</h1>
+            <button class="btn btn-secondary" (click)="displayModal=!displayModal">Later</button>
+            <button class="btn btn-primary" (click)="initNewTest()">Yes!</button>
+        </ng-container>
+        <ng-container *ngIf="!canTakeCurrTest()">
+            <h1>Come back tomorrow, you have <span style="color:yellowgreen">already taken</span> today's test</h1>
+            <button class="btn btn-primary" style="bottom: 12px;" (click)="displayModal=!displayModal">Ok</button>
+        </ng-container>
     </div>
 </div>
 <div class="modal-question-container" *ngIf="displayModal2">

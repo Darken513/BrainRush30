@@ -71,6 +71,20 @@ export class HomePageComponent implements OnInit {
     this.displayModal2 = true;
     this.selected4Review = idx
   }
+  canTakeCurrTest() {
+    let testAttempt = this.fetchedGeneral[this.fetchedGeneral.length - 1];
+    let attemptDate = new Date(testAttempt.attempted_at)
+    const today = new Date();
+    if (
+      attemptDate.getFullYear() === today.getFullYear() &&
+      attemptDate.getMonth() === today.getMonth() &&
+      attemptDate.getDate() === today.getDate() &&
+      testAttempt.score >= testAttempt.passing_score
+    ) {
+      return false;
+    }
+    return true;
+  }
   initReview() {
     this.router.navigate(['/test/review', this.fetchedGeneral[this.selected4Review - 1].test_id]);
   }

@@ -128,7 +128,7 @@ exports.fetchCurrentDay = async (user_id) => {
     `;
     try {
         let toret = await db_utils.getSync(db, query, [user_id]);
-        return toret ? toret.day + 1 : 1;
+        return toret;
     } catch (err) {
         console.log(err);
         return { error: err.message };

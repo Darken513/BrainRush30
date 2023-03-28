@@ -1,4 +1,4 @@
-<app-loading *ngIf="loading"></app-loading>
+<app-loading *ngIf="loading && !displayModal"></app-loading>
 <div id="test-wrapper" *ngIf="tests || reviewMode">
     <div class="test-container-inner" *ngIf="tests && !reviewMode">
         <app-progress-bar [tests]="tests" [currentStep]="currentStep"></app-progress-bar>

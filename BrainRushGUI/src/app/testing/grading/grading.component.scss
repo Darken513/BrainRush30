@@ -142,3 +142,19 @@
         background-color: #f44336;
     }
 }
+.modal-question {
+    position: fixed;
+    z-index: 99;
+    top: calc((100vh - 250px) / 2);
+    left: calc((100vw - 570px) / 2);
+    height: 125px;
+    padding: 15px;
+    border-radius: 20px;
+    box-shadow: 0 0 15px #1a1919;
+    width: 570px;
+    background: #282828;
+    color: white;
+}
+.modal-question button {
+    bottom: 10px;
+}

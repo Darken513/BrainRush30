@@ -35,11 +35,6 @@ export class TextToHideComponent implements OnInit {
       let correctAns = this.test.keywords.split(',').map((word:string) => word.trim());
       this.correctAns = _.intersection(answers, correctAns);
       this.wrongAns = _.difference(_.union(answers, correctAns), this.correctAns);
-      console.log({
-        answers,
-        wrongAns: this.wrongAns,
-        correctAns: correctAns
-      });
     }
     this.displayedKw = this.test.displayed_keywords.split(',').map((kw: string) => ({ text: kw.trim(), selected: false }));
     this.displaySeconds = this.getTimerSeconds();
