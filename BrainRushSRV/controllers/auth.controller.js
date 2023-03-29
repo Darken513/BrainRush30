@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const userDB = require("../models/user.model");
+const notifScheduler = require("../services/notifScheduler");
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
@@ -38,6 +39,7 @@ exports.changeConf = async (req,res) =>{
   const user_id = req.params.id;
   await userDB.updateConf({username, notif_time:NotifDate, design_mode, id:user_id})
   const user = await userDB.getById(user_id);
+  notifScheduler.scheduelMail(user)
   const token = jwt.sign(
     {
       id: user.id,
