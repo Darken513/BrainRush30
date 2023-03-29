@@ -18,10 +18,18 @@ export class AuthService {
   public login(email: string, password: string): Observable<any> {
     return this.http.post<{ response: any }>(`${this.apiUrl}/login`, { email, password });
   }
-
-  public setToken(token: string): void {
+  public saveConf(username:string, NotifDate:string, design_mode:boolean){
+    return this.http.post<{ response: any }>(`${this.apiUrl}/conf/${this.getCurrentUser().id}`, {username, NotifDate, design_mode});
+  }
+  public setToken(token: string, dontNav?:boolean): void {
     localStorage.setItem('token', token);
+    if(dontNav) return;
     this.router.navigateByUrl('/home');
+    if(this.getCurrentUser().design_mode){
+      document.body.style.filter = "none"
+      return;
+    }
+    document.body.style.filter = "invert(1) hue-rotate(60deg)"
   }
 
   public logout(): void {
@@ -38,8 +46,8 @@ export class AuthService {
     return null;
   }
 
-  signUp(email: string, password: string): Observable<any> {
-    const body = { email, password };
+  signUp(email: string, password: string, username:string): Observable<any> {
+    const body = { email, password, username };
     return this.http.post<any>(`${this.apiUrl}/signup`, body);
   }
 }

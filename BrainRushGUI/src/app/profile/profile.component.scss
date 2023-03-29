@@ -1,0 +1,90 @@
+#profile-wrapper {
+    transition: 1s;
+    position: absolute;
+    top: calc((100vh - 500px) /2);
+    left: calc((100vw - 450px) / 2);
+    height: 500px;
+    width: 450px;
+    padding: 25px;
+    background: #222222;
+    border-radius: 20px;
+    box-shadow: 0 0 3px white;
+
+    h6 {
+        color: white;
+        font-size: 1.3rem;
+        margin: 0;
+    }
+
+    h4 {
+        color: yellowgreen;
+    }
+
+    label {
+        color: #90c6d7;
+        padding-left: 10px;
+        margin-top: 10px;
+        font-weight: 200;
+        margin-bottom: 0;
+    }
+
+    input {
+        border-color: #96bfcb;
+    }
+
+    input[type="time"]::-webkit-calendar-picker-indicator {
+        filter: invert(48%) sepia(43%) saturate(2207%) hue-rotate(120deg) brightness(95%) contrast(80%);
+    }
+
+    .switch-holder {
+        display: inline-block;
+        position: relative;
+        top: 7px;
+        left: 15px;
+        width: 60px;
+        height: 25px;
+        background-color: rgb(64, 62, 62);
+        border-radius: 15px;
+        cursor: pointer;
+        transition: 0.5s;
+        padding: 0;
+
+        .switch-btn:hover{
+            background-color: rgb(101, 207, 152);
+        }
+        .switch-btn {
+            display: block;
+            position: relative;
+            transition: 0.5s;
+            width: 25px;
+            top: 2px;
+            left: 2px;
+            height: 21px;
+            background-color: rgb(73, 177, 191);
+            border-radius: 15px;
+        }
+    }
+    .btn-primary{
+        position: absolute;
+        width: 30%;
+        bottom: 15px;
+    }
+    .btn-save{
+        left: 50%;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        background-color: rgb(184, 255, 77);
+    }
+    .btn-save:hover{
+        background-color: rgb(208, 255, 137);
+    }
+    .btn-home{
+        left: 20%;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        background-color: #71b8cd;
+    }
+    .btn-home:hover{
+        background-color: #88cde2;
+    }
+}

@@ -10,6 +10,7 @@ import { SignupPageComponent } from './signup-page/signup-page.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { TestingModule } from './testing/testing.module';
 import { JwtInterceptor } from './jwtInterceptor';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { JwtInterceptor } from './jwtInterceptor';
     LoginPageComponent,
     SignupPageComponent,
     HomePageComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,

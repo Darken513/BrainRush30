@@ -21,6 +21,7 @@ export class SignupPageComponent implements OnInit {
   ngOnInit() {
     this.signupForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
+      username: ['', [Validators.required, Validators.minLength(4)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       retypePassword: ['', [Validators.required]]
     }, {
@@ -42,8 +43,8 @@ export class SignupPageComponent implements OnInit {
 
   onSubmit() {
     if (this.signupForm.valid) {
-      const { email, password } = this.signupForm.value;
-      this.authService.signUp(email, password)
+      const { email, password, username } = this.signupForm.value;
+      this.authService.signUp(email, password, username)
         .subscribe({
           next: (response: any) => {
             if (response.title && response.body) {

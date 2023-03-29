@@ -4,10 +4,17 @@ const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('./database.db');
 const db_utils = require('../services/database')
 
-exports.createNew = async (password, email) => {
+exports.createNew = async (password, email, username) => {
     let hash = bcrypt.hashSync(password, saltRounds);
     try {
-        return await db_utils.runSync(db, `INSERT INTO USERS (password, email) VALUES (?, ?)`, [hash, email]);
+        return await db_utils.runSync(db, `INSERT INTO USERS (password, email, username) VALUES (?, ?, ?)`, [hash, email, username]);
+    } catch (err) {
+        return { error: err.message.includes('SQLITE_CONSTRAINT') ? 'User already exists' : 'An error has occurred' };
+    }
+}
+exports.updateConf = async (userDetails) => {
+    try {
+        return await db_utils.runSync(db, `UPDATE USERS SET Username=?, design_mode=?, notif_time=? where id = ?`, [userDetails.username, userDetails.design_mode, userDetails.notif_time, userDetails.id]);
     } catch (err) {
         return { error: err.message.includes('SQLITE_CONSTRAINT') ? 'User already exists' : 'An error has occurred' };
     }

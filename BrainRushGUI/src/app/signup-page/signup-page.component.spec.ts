@@ -44,6 +44,7 @@ describe('SignupPageComponent', () => {
   describe('onSubmit()', () => {
     it('should call authService.signUp() with correct email and password', () => {
       const email = 'test@example.com';
+      const username = 'username';
       const password = 'password123';
       const signUpResponse = { title: 'Success', body: 'You have successfully signed up!' };
       
@@ -52,13 +53,14 @@ describe('SignupPageComponent', () => {
 
       const form = component.signupForm as FormGroup;
       form.controls['email'].setValue(email);
+      form.controls['username'].setValue(username);
       form.controls['password'].setValue(password);
       form.controls['retypePassword'].setValue(password);
       fixture.detectChanges();
 
       component.onSubmit();
 
-      expect(authServiceSpy.signUp).toHaveBeenCalledWith(email, password);
+      expect(authServiceSpy.signUp).toHaveBeenCalledWith(email, password, username);
     });
 
     it('should call notificationService.showNotification() with correct arguments on success', () => {

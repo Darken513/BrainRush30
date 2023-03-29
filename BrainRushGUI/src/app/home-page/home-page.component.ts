@@ -34,6 +34,11 @@ export class HomePageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if(this.authService.getCurrentUser().design_mode){
+      document.body.style.filter = "none"
+    }else{
+      document.body.style.filter = "invert(1) hue-rotate(60deg)"
+    }
     this.homeService.fetchGeneral().subscribe(
       {
         next: res => {
@@ -73,6 +78,8 @@ export class HomePageComponent implements OnInit {
   }
   canTakeCurrTest() {
     let testAttempt = this.fetchedGeneral[this.fetchedGeneral.length - 1];
+    if(!testAttempt)
+      return true;
     let attemptDate = new Date(testAttempt.attempted_at)
     const today = new Date();
     if (
@@ -90,6 +97,9 @@ export class HomePageComponent implements OnInit {
   }
   initNewTest() {
     this.router.navigate(['/test/new', this.currentDay]);
+  }
+  gotoProfile(){
+    this.router.navigate(['profile'])
   }
   logout(): void {
     this.authService.logout();

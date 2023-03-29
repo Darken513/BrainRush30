@@ -4,8 +4,9 @@ exports.initDataBase = (db) => {
             id INTEGER PRIMARY KEY,
             password TEXT NOT NULL,
             email TEXT NOT NULL UNIQUE,
+            username TEXT,
             notif_time TIME DEFAULT '08:00:00',
-            design_mode INTEGER DEFAULT 0,
+            design_mode INTEGER DEFAULT 1,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );`
     );

@@ -20,12 +20,12 @@ export class NotificationService {
       notifDiv.remove()
     }, 2500)
   }
-  createNotifDiv(title: string): Element {
+  private createNotifDiv(title: string): Element {
     let notificationDiv = document.createElement('div');
     notificationDiv.classList.add(...['notification', title.toLowerCase()]);
     return notificationDiv;
   }
-  createNotifInner(title: string, body: string): Array<Element> {
+  private createNotifInner(title: string, body: string): Array<Element> {
     let notificationTitle = document.createElement('h3');
     notificationTitle.classList.add('title');
     notificationTitle.innerText = title;
@@ -34,7 +34,7 @@ export class NotificationService {
     notificationBody.innerText = body;
     return [notificationTitle, notificationBody];
   }
-  createNotifCloseBtn(notifDiv: Element): Element {
+  private createNotifCloseBtn(notifDiv: Element): Element {
     let notifBtn = document.createElement('i');
     notifBtn.classList.add(...['fa', 'fa-times', 'btn']);
     notifBtn.addEventListener("click", (event) => {

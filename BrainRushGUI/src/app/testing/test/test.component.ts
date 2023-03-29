@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from 'src/app/auth.service';
 import { TestingService } from '../testing.service';
 
 @Component({
@@ -17,11 +18,17 @@ export class TestComponent implements OnInit {
   tests: Array<any> | undefined;
   constructor(
     private testingService: TestingService,
+    private authService: AuthService,
     private router: Router,
     private activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    if(this.authService.getCurrentUser().design_mode){
+      document.body.style.filter = "none"
+    }else{
+      document.body.style.filter = "invert(1) hue-rotate(60deg)"
+    }
     let route = this.router.url;
     if (route.includes('new')) {
       this.activatedRoute.params.subscribe(params => {

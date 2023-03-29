@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth-guard.guard';
 import { HomePageComponent } from './home-page/home-page.component';
 import { LoginPageComponent } from './login-page/login-page.component';
+import { ProfileComponent } from './profile/profile.component';
 import { SignupPageComponent } from './signup-page/signup-page.component';
 import { TestComponent } from './testing/test/test.component';
 
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'test', component: TestComponent },
   { path: 'test/new/:day', component: TestComponent },
   { path: 'test/review/:test_id', component: TestComponent },
+  { path: 'profile', component: ProfileComponent },
   { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
   { path: '**', redirectTo: 'auth/login', pathMatch: 'full' }
 ];
