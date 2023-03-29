@@ -19,7 +19,6 @@ export class GradingComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this);
     let passingScore = this.generalResult.passing_grade
     this.generalGradesArr = _.map(this.generalResult, (val, idx) => {
       switch (idx) {
