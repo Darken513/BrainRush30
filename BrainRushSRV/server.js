@@ -7,6 +7,7 @@ const homeRouter = require('./routers/home.router');
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database("./database.db");
 const db_utils = require('./services/database')
+const notifScheduler = require("./services/notifScheduler");
 
 const app = express();
 app.use(cors());
@@ -17,7 +18,8 @@ app.use('/test', testRouter);
 app.use('/home', homeRouter);
 
 async function init() {
-  db_utils.initDataBase(db);
+  await db_utils.initDataBase(db);
+  await notifScheduler.initSchedulers(db);
 }
 
 init();

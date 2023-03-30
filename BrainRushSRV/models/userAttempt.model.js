@@ -51,7 +51,7 @@ exports.getById = async (id) => {
 }
 exports.getByTestId = async (id) => {
     try {
-        let toret = { test_id:id }
+        let toret = { test_id: id }
         let temp = await exports.getByTestIdShort(id);
         toret.score = temp.score;
         toret.attempted_at = temp.attempted_at;
@@ -63,7 +63,21 @@ exports.getByTestId = async (id) => {
         return { error: err.message };
     }
 }
-
+exports.getFirstSuccessfullAtmpt = async (userId, day) => {
+    try {
+        const query = `
+            SELECT * FROM USER_ATTEMPTS ua
+                JOIN TESTS ON TESTS.id = ua.test_id
+            WHERE user_id = ? AND day = ? AND score >= passing_score
+            ORDER BY attempted_at asc;
+        `;
+        let row = await db_utils.getSync(db, query, [userId, day]);
+        return row ? row : undefined;
+    } catch (err) {
+        console.log(err);
+        return { error: err.message };
+    }
+}
 exports.getAllByUserAndDay = async (userId, day) => {
     try {
         let toret = []
@@ -116,6 +130,12 @@ exports.fetchGeneralDetails = async (user_id) => {
     `;
     try {
         let toret = await db_utils.getAllSync(db, query, [user_id]);
+        for (let i = 0; i < toret.length; i++) {
+            const atmpt = toret[i];
+            let firstAtpmt = await exports.getFirstSuccessfullAtmpt(atmpt.user_id, atmpt.day)
+            if (firstAtpmt)
+                atmpt.first_attempt = firstAtpmt.attempted_at;
+        }
         return toret
     } catch (err) {
         console.log(err);
@@ -136,7 +156,7 @@ exports.fetchCurrentDay = async (user_id) => {
 }
 exports.gradeTestAndFlush = async (testResult) => {
     let testDetails = testDB.getByIdShort(testResult.id)
-    let toret = { test_id:testResult.id, totalGrade: 0, textToSpeechGrade: 0, generatedKwGrade: 0, textToHideGrade: 0, passing_grade: testDetails.passing_grade }
+    let toret = { test_id: testResult.id, totalGrade: 0, textToSpeechGrade: 0, generatedKwGrade: 0, textToHideGrade: 0, passing_grade: testDetails.passing_grade }
     for (const idx in testResult.test.tests) {
         let test = testResult.test.tests[idx];
         switch (test.type) {

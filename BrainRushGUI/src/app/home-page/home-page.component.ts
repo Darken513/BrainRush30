@@ -80,7 +80,9 @@ export class HomePageComponent implements OnInit {
     let testAttempt = this.fetchedGeneral[this.fetchedGeneral.length - 1];
     if(!testAttempt)
       return true;
-    let attemptDate = new Date(testAttempt.attempted_at)
+    if(!testAttempt.first_attempt)
+      return true;
+    let attemptDate = new Date(testAttempt.first_attempt)
     const today = new Date();
     if (
       attemptDate.getFullYear() === today.getFullYear() &&

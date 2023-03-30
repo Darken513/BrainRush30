@@ -1,5 +1,5 @@
-exports.initDataBase = (db) => {
-    db.run(`
+exports.initDataBase = async (db) => {
+    await exports.runSync(db, `
         CREATE TABLE IF NOT EXISTS USERS (
             id INTEGER PRIMARY KEY,
             password TEXT NOT NULL,
@@ -9,15 +9,15 @@ exports.initDataBase = (db) => {
             design_mode INTEGER DEFAULT 1,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );`
-    );
-    db.run(`
+    )
+    await exports.runSync(db, `
         CREATE TABLE IF NOT EXISTS KEYWORDS (
             id INTEGER PRIMARY KEY,
             word TEXT NOT NULL UNIQUE,
             difficulty INTEGER NOT NULL
         );`
     );
-    db.run(`
+    await exports.runSync(db, `
         CREATE TABLE IF NOT EXISTS TEXT_TO_SPEECH (
             id INTEGER PRIMARY KEY,
             text TEXT NOT NULL,
@@ -25,7 +25,7 @@ exports.initDataBase = (db) => {
             difficulty INTEGER NOT NULL
         );`
     );
-    db.run(`
+    await exports.runSync(db, `
         CREATE TABLE IF NOT EXISTS USER_ATTEMPTS (
             id INTEGER PRIMARY KEY,
             user_id INTEGER,
@@ -36,14 +36,14 @@ exports.initDataBase = (db) => {
             FOREIGN KEY(test_id) REFERENCES TESTS(id)
         );`
     );
-    db.run(`
+    await exports.runSync(db, `
         CREATE TABLE IF NOT EXISTS TESTS (
             id INTEGER PRIMARY KEY,
             day INTEGER,
             passing_score INTEGER
         );`
     );
-    db.run(`
+    await exports.runSync(db, `
         CREATE TABLE IF NOT EXISTS GENERATED_TTS_TH (
             id INTEGER PRIMARY KEY,
             test_id INTEGER,
@@ -55,7 +55,7 @@ exports.initDataBase = (db) => {
             FOREIGN KEY(TTS_id) REFERENCES TEXT_TO_SPEECH(id)
         );`
     );
-    db.run(`
+    await exports.runSync(db, `
         CREATE TABLE IF NOT EXISTS GENERATED_KEYWORDS (
             id INTEGER PRIMARY KEY,
             test_id INTEGER,
@@ -63,7 +63,7 @@ exports.initDataBase = (db) => {
             FOREIGN KEY(test_id) REFERENCES TESTS(id)
         );`
     );
-    db.run(`
+    await exports.runSync(db, `
         CREATE TABLE IF NOT EXISTS KEYWORDS_GENERATED_KEYWORDS (
             id INTEGER PRIMARY KEY,
             gk_id INTEGER,
